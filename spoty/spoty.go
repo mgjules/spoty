@@ -27,10 +27,10 @@ type Image struct {
 }
 
 type Spoty struct {
-	client *spotify.Client
+	Client *spotify.Client
 
-	auth  spotify.Authenticator
-	state string
+	Auth  spotify.Authenticator
+	State string
 
 	cache *cache.Cache
 }
@@ -58,14 +58,14 @@ func New(clientID, clientSecret, host string, port int, cache *cache.Cache) (*Sp
 	}
 
 	return &Spoty{
-		auth:  auth,
-		state: state.String(),
+		Auth:  auth,
+		State: state.String(),
 		cache: cache,
 	}, nil
 }
 
-func (s *Spoty) isPlaying() bool {
-	state, err := s.client.PlayerState()
+func (s *Spoty) IsPlaying() bool {
+	state, err := s.Client.PlayerState()
 	if err != nil {
 		return false
 	}
@@ -73,7 +73,7 @@ func (s *Spoty) isPlaying() bool {
 	return state.Playing
 }
 
-func (s *Spoty) trackCurrentlyPlaying() (*spotify.FullTrack, error) {
+func (s *Spoty) TrackCurrentlyPlaying() (*spotify.FullTrack, error) {
 	const cacheCurrentTrackKey = "current_track"
 
 	cachedTrack, found := s.cache.Get(cacheCurrentTrackKey)
@@ -81,11 +81,11 @@ func (s *Spoty) trackCurrentlyPlaying() (*spotify.FullTrack, error) {
 		return cachedTrack.(*spotify.FullTrack), nil
 	}
 
-	if !s.isPlaying() {
+	if !s.IsPlaying() {
 		return nil, errors.New("no track currently playing")
 	}
 
-	playing, err := s.client.PlayerCurrentlyPlaying()
+	playing, err := s.Client.PlayerCurrentlyPlaying()
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (s *Spoty) trackCurrentlyPlaying() (*spotify.FullTrack, error) {
 	return playing.Item, nil
 }
 
-func (s *Spoty) trackImages(track *spotify.FullTrack) ([]Image, error) {
+func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 	if track == nil {
 		return nil, errors.New("invalid track")
 	}

@@ -7,16 +7,18 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/JulesMike/spoty/spoty"
 	"github.com/gin-gonic/gin"
 )
 
 type Server struct {
 	router *gin.Engine
 	http   *http.Server
+	spoty  *spoty.Spoty
 	addr   string
 }
 
-func New(prod bool, host string, port int) *Server {
+func New(prod bool, host string, port int, spoty *spoty.Spoty) *Server {
 	if prod {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -24,6 +26,7 @@ func New(prod bool, host string, port int) *Server {
 	s := Server{
 		router: gin.Default(),
 		addr:   fmt.Sprintf("%s:%d", host, port),
+		spoty:  spoty,
 	}
 
 	s.http = &http.Server{
@@ -35,14 +38,36 @@ func New(prod bool, host string, port int) *Server {
 		ReadHeaderTimeout: 2 * time.Second,
 	}
 
-	s.registerHealthCheck()
-	s.registerSwagger()
+	s.registerRoutes()
 
 	return &s
 }
 
-func (s *Server) APIRoute() *gin.RouterGroup {
-	return s.router.Group("/api")
+func (s *Server) registerRoutes() {
+	// Swagger
+	s.router.GET("/swagger/*any", s.handleSwagger())
+
+	api := s.router.Group("/api")
+	{
+		// Health Check
+		api.GET("/", s.handleHealthCheck())
+
+		// Guest routes
+		guest := api.Group("/")
+		guest.Use(s.unauthenticatedOnly())
+		{
+			guest.GET("/authenticate", s.handleAuthenticate)
+			guest.GET("/callback", s.handleCallback)
+		}
+
+		// Authenticated routes
+		authenticated := api.Group("/")
+		authenticated.Use(s.authenticatedOnly())
+		{
+			authenticated.GET("/current", s.handleCurrentTrack)
+			authenticated.GET("/current/images", s.handleCurrentTrackImages)
+		}
+	}
 }
 
 func (s *Server) Start() error {
