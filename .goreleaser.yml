@@ -1,0 +1,40 @@
+project_name: spoty
+dist: ./bin
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+    - make go_mod_tidy
+    - make swag
+builds:
+  - env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+    goos:
+      - linux
+      - windows
+      - darwin
+archives:
+  - replacements:
+      darwin: MacOS
+      linux: Linux
+      windows: Windows
+      386: 32-bit
+      amd64: 64-bit
+    files:
+      - LICENSE.md
+      - README.md
+      - .env.dist
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'

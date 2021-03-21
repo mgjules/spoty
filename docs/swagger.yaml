@@ -1,0 +1,341 @@
+definitions:
+  color.RGBA:
+    properties:
+      r:
+        type: integer
+    type: object
+  server.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  server.Success:
+    properties:
+      success:
+        type: string
+    type: object
+  spotify.FullTrack:
+    properties:
+      album:
+        $ref: '#/definitions/spotify.SimpleAlbum'
+        description: The album on which the track appears. The album object includes a link in href to full information about the album.
+      artists:
+        items:
+          $ref: '#/definitions/spotify.SimpleArtist'
+        type: array
+      available_markets:
+        description: |-
+          A list of the countries in which the track can be played,
+          identified by their ISO 3166-1 alpha-2 codes.
+        items:
+          type: string
+        type: array
+      disc_number:
+        description: The disc number (usually 1 unless the album consists of more than one disc).
+        type: integer
+      duration_ms:
+        description: The length of the track, in milliseconds.
+        type: integer
+      explicit:
+        description: |-
+          Whether or not the track has explicit lyrics.
+          true => yes, it does; false => no, it does not.
+        type: boolean
+      external_ids:
+        additionalProperties:
+          type: string
+        description: Known external IDs for the track.
+        type: object
+      external_urls:
+        additionalProperties:
+          type: string
+        description: External URLs for this track.
+        type: object
+      href:
+        description: A link to the Web API endpoint providing full details for this track.
+        type: string
+      id:
+        type: string
+      is_playable:
+        description: |-
+          IsPlayable defines if the track is playable. It's reported when the "market" parameter is passed to the tracks
+          listing API.
+          See: https://developer.spotify.com/documentation/general/guides/track-relinking-guide/
+        type: boolean
+      linked_from:
+        $ref: '#/definitions/spotify.LinkedFromInfo'
+        description: |-
+          LinkedFrom points to the linked track. It's reported when the "market" parameter is passed to the tracks listing
+          API.
+      name:
+        type: string
+      popularity:
+        description: |-
+          Popularity of the track.  The value will be between 0 and 100,
+          with 100 being the most popular.  The popularity is calculated from
+          both total plays and most recent plays.
+        type: integer
+      preview_url:
+        description: A URL to a 30 second preview (MP3) of the track.
+        type: string
+      track_number:
+        description: |-
+          The number of the track.  If an album has several
+          discs, the track number is the number on the specified
+          DiscNumber.
+        type: integer
+      uri:
+        type: string
+    type: object
+  spotify.Image:
+    properties:
+      height:
+        description: The image height, in pixels.
+        type: integer
+      url:
+        description: The source URL of the image.
+        type: string
+      width:
+        description: The image width, in pixels.
+        type: integer
+    type: object
+  spotify.LinkedFromInfo:
+    properties:
+      external_urls:
+        additionalProperties:
+          type: string
+        description: ExternalURLs are the known external APIs for this track or album
+        type: object
+      href:
+        description: Href is a link to the Web API endpoint providing full details
+        type: string
+      id:
+        description: ID of the linked track
+        type: string
+      type:
+        description: 'Type of the link: album of the track'
+        type: string
+      uri:
+        description: URI is the Spotify URI of the track/album
+        type: string
+    type: object
+  spotify.SimpleAlbum:
+    properties:
+      album_group:
+        description: |-
+          The field is present when getting an artist’s
+          albums. Possible values are “album”, “single”,
+          “compilation”, “appears_on”. Compare to album_type
+          this field represents relationship between the artist
+          and the album.
+        type: string
+      album_type:
+        description: |-
+          The type of the album: one of "album",
+          "single", or "compilation".
+        type: string
+      artists:
+        description: A slice of SimpleArtists
+        items:
+          $ref: '#/definitions/spotify.SimpleArtist'
+        type: array
+      available_markets:
+        description: |-
+          The markets in which the album is available,
+          identified using ISO 3166-1 alpha-2 country
+          codes.  Note that al album is considered
+          available in a market when at least 1 of its
+          tracks is available in that market.
+        items:
+          type: string
+        type: array
+      external_urls:
+        additionalProperties:
+          type: string
+        description: Known external URLs for this album.
+        type: object
+      href:
+        description: |-
+          A link to the Web API enpoint providing full
+          details of the album.
+        type: string
+      id:
+        description: The SpotifyID for the album.
+        type: string
+      images:
+        description: |-
+          The cover art for the album in various sizes,
+          widest first.
+        items:
+          $ref: '#/definitions/spotify.Image'
+        type: array
+      name:
+        description: The name of the album.
+        type: string
+      release_date:
+        description: |-
+          The date the album was first released.  For example, "1981-12-15".
+          Depending on the ReleaseDatePrecision, it might be shown as
+          "1981" or "1981-12". You can use ReleaseDateTime to convert this
+          to a time.Time value.
+        type: string
+      release_date_precision:
+        description: 'The precision with which ReleaseDate value is known: "year", "month", or "day"'
+        type: string
+      uri:
+        description: The SpotifyURI for the album.
+        type: string
+    type: object
+  spotify.SimpleArtist:
+    properties:
+      external_urls:
+        additionalProperties:
+          type: string
+        type: object
+      href:
+        description: A link to the Web API enpoint providing full details of the artist.
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      uri:
+        description: The Spotify URI for the artist.
+        type: string
+    type: object
+  spoty.Image:
+    properties:
+      error:
+        type: string
+      height:
+        type: integer
+      hex:
+        type: string
+      rgba:
+        $ref: '#/definitions/color.RGBA'
+      url:
+        type: string
+      width:
+        type: integer
+    type: object
+info:
+  contact:
+    name: Jules Michael
+  description: Access information about current playing track on spotify through REST endpoints.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Spoty API
+  version: 0.1.0
+paths:
+  /api:
+    get:
+      description: checks if server is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/server.Success'
+      summary: Health Check
+      tags:
+      - core
+  /api/authenticate:
+    get:
+      description: redirects user to spotify for authentication
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: redirection to spotify
+          schema:
+            type: string
+        "403":
+          description: already authenticated
+          schema:
+            $ref: '#/definitions/server.Error'
+      summary: Authentication
+      tags:
+      - spoty
+  /api/callback:
+    get:
+      description: spotify redirects to the this endpoint on success
+      parameters:
+      - description: code from spotify
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: state from spotify
+        in: query
+        name: state
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: authenticated successfully
+          schema:
+            $ref: '#/definitions/server.Success'
+        "403":
+          description: could not retrieve token
+          schema:
+            $ref: '#/definitions/server.Error'
+        "404":
+          description: could not retrieve current user
+          schema:
+            $ref: '#/definitions/server.Error'
+      summary: Callback
+      tags:
+      - spoty
+  /api/current:
+    get:
+      description: returns information about the current playing track
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns full track information
+          schema:
+            $ref: '#/definitions/spotify.FullTrack'
+        "401":
+          description: not authenticated
+          schema:
+            $ref: '#/definitions/server.Error'
+        "404":
+          description: no current playing track found
+          schema:
+            $ref: '#/definitions/server.Error'
+      summary: Current Playing Track
+      tags:
+      - spoty
+  /api/current/images:
+    get:
+      description: returns the album images of the current playing track
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns album images
+          schema:
+            items:
+              $ref: '#/definitions/spoty.Image'
+            type: array
+        "401":
+          description: not authenticated
+          schema:
+            $ref: '#/definitions/server.Error'
+        "404":
+          description: no current playing track found
+          schema:
+            $ref: '#/definitions/server.Error'
+        "500":
+          description: album images could not be processed
+          schema:
+            $ref: '#/definitions/server.Error'
+      summary: Album Images of Current Playing Track
+      tags:
+      - spoty
+swagger: "2.0"
