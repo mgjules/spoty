@@ -5,7 +5,6 @@ import (
 
 	"github.com/JulesMike/spoty/app"
 	"github.com/JulesMike/spoty/server"
-	"github.com/JulesMike/spoty/spoty"
 	"go.uber.org/fx"
 )
 
@@ -27,9 +26,7 @@ func main() {
 func run() error {
 	app := fx.New(
 		app.DefaultProviders,
-		fx.Invoke(func(spoty *spoty.Spoty, server *server.Server) {
-			spoty.RegisterRoutes(server.APIRoute())
-		}),
+		fx.Invoke(func(server *server.Server) {}),
 	)
 	if err := app.Err(); err != nil {
 		return err

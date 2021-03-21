@@ -37,8 +37,8 @@ func ProvideSpoty(cfg *config.Config, cache *cache.Cache) (*spoty.Spoty, error) 
 	return spoty, nil
 }
 
-func ProvideServer(lc fx.Lifecycle, cfg *config.Config) (*server.Server, error) {
-	server := server.New(cfg.Prod, cfg.Host, cfg.Port)
+func ProvideServer(lc fx.Lifecycle, cfg *config.Config, spoty *spoty.Spoty) (*server.Server, error) {
+	server := server.New(cfg.Prod, cfg.Host, cfg.Port, spoty)
 
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
