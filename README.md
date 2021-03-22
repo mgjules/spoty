@@ -35,14 +35,14 @@ Spoty provides simple REST API endpoints to query the current playing track on [
     CACHE_MAX_COST=1000000
     ```
 
-4. Edit the `Redirect URIs` setting of your application in spotify to match the environment variables:
+4. Edit the `Redirect URIs` setting of your Spotify application to match the environment variables:
 
     Example:
     ```sh
     http://<HOST>:<PORT>/api/callback
     ```
 
-5. Execute the binary and head to the `/api` route and expect this json response with a HTTP status code `200`:
+5. Execute the binary and head to the `/api` (health-check) route and expect this json response with a HTTP status code `200`:
 
     ```json
     {
@@ -52,14 +52,14 @@ Spoty provides simple REST API endpoints to query the current playing track on [
 
 ## Usage
 
-To access most of routes, you'll need to authenticate yourself against spotify by going to the `/api/authenticate` route:
+To access most of the routes, you'll need to authenticate yourself against Spotify by going to the `/api/authenticate` route:
 
 Example:
 ```sh
 http://<HOST>:<PORT>/api/authenticate
 ```
 
-1. You should be redirected to spotify for authentication. 
+1. You should be redirected to Spotify for authentication. 
 2. After which you will be redirected back to the url specified in `REDIRECT_URL`.
 
 ## Configuration
@@ -85,7 +85,7 @@ http://<HOST>:<PORT>/swagger/index.html
 
 ## About the project
 
-This project was inspired by [arwinneil/spotify_chroma](https://github.com/arwinneil/spotify_chroma) and was intially coded in a similar regard as the latter: a fun PoC. However, this project will be maintained until it is deemed feature complete and bug free by the author/maintainer(s) 😊
+This project was inspired by [arwinneil/spotify_chroma](https://github.com/arwinneil/spotify_chroma) and was initially coded in a similar regard as the latter: a fun PoC. However, this project will be maintained until it is deemed feature complete and bug free by the author/maintainer(s) 😊
 
 ## Stability
 
