@@ -22,7 +22,7 @@ type Error struct {
 // @Description checks if server is running
 // @Tags core
 // @Produce json
-// @Success 200 {object} Success
+// @Success 200 {object} server.Success
 // @Router /api [get]
 func (s *Server) handleHealthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -92,7 +92,7 @@ func (s *Server) handleCurrentTrackImages(c *gin.Context) {
 // @Failure 403 {object} server.Error "already authenticated"
 // @Router /api/authenticate [get]
 func (s *Server) handleAuthenticate(c *gin.Context) {
-	c.Redirect(http.StatusFound, s.spoty.Auth.AuthURL(s.spoty.State))
+	c.Redirect(http.StatusFound, s.spoty.AuthURL())
 }
 
 // handleCallback godoc
@@ -108,21 +108,10 @@ func (s *Server) handleAuthenticate(c *gin.Context) {
 // @Failure 404 {object} server.Error "could not retrieve current user"
 // @Router /api/callback [get]
 func (s *Server) handleCallback(c *gin.Context) {
-	tok, err := s.spoty.Auth.Token(s.spoty.State, c.Request)
-	if err != nil {
+	if err := s.spoty.SetupNewClient(c.Request); err != nil {
 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "could not retrieve token"})
 		return
 	}
-
-	client := s.spoty.Auth.NewClient(tok)
-	if _, err := client.CurrentUser(); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "could not retrieve current user"})
-		return
-	}
-
-	client.AutoRetry = true
-
-	s.spoty.Client = &client
 
 	c.JSON(http.StatusOK, gin.H{"success": "welcome, you are now authenticated!"})
 }
