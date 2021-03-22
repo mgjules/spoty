@@ -9,8 +9,9 @@ Spoty provides simple REST API endpoints to query the current playing track on [
 
 ## Contents
   - [Getting started](#getting-started)
-  - [Configuration](#configuration)
+  - [Usage](#usage)
   - [API Documentation](#api-documentation)
+  - [Configuration](#configuration)
   - [About the project](#about-the-project)
   - [Stability](#stability)
 
@@ -62,6 +63,15 @@ http://<HOST>:<PORT>/api/authenticate
 1. You should be redirected to Spotify for authentication. 
 2. After which you will be redirected back to the url specified in `REDIRECT_URL`.
 
+## API Documentation
+
+Consult the swagger ui page at the `/swagger/index.html` route:
+
+Example:
+```sh
+http://<HOST>:<PORT>/swagger/index.html
+```
+
 ## Configuration
 
 | ENV               | Description                               | Required  | Default                           |
@@ -73,15 +83,6 @@ http://<HOST>:<PORT>/api/authenticate
 | PORT              | Port for HTTP server                      | No        | 13337                             |
 | CACHE_MAX_KEYS    | Maximum number of keys for cache          | No        | 64                                |
 | CACHE_MAX_COST    | Maximum size of cache (in bytes)          | No        | 1000000                           |
-
-## API Documentation
-
-Consult the swagger ui page at the `/swagger/index.html` route:
-
-Example:
-```sh
-http://<HOST>:<PORT>/swagger/index.html
-```
 
 ## About the project
 
