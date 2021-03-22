@@ -2,8 +2,10 @@ name: goreleaser
 
 on:
   push:
+    branches:
+      - master
     tags:
-      - "*"
+      - "v*.*.*"
 
 jobs:
   goreleaser:
@@ -20,8 +22,10 @@ jobs:
         with:
           go-version: 1.16
       -
-        name: Set up Swaggo
-        run: go install github.com/swaggo/swag/cmd/swag@latest
+        name: Set up extra tools
+        run: |
+          go install github.com/swaggo/swag/cmd/swag@latest
+          go install github.com/magefile/mage@latest
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2

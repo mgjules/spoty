@@ -4,8 +4,10 @@ env:
   - GO111MODULE=on
 before:
   hooks:
-    - make go_mod_tidy
-    - make swag
+    - mage tidy
+    - mage vet
+    - mage test
+    - mage docs 
 builds:
   - env:
       - CGO_ENABLED=0
