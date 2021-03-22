@@ -8,6 +8,7 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/JulesMike/spoty/cache"
@@ -107,33 +108,46 @@ func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 		return cachedImages.([]Image), nil
 	}
 
+	httpClient := &http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	var wg sync.WaitGroup
+
 	var images []Image
 	for _, albumImage := range track.Album.Images {
-		img := Image{
-			URL:    albumImage.URL,
-			Height: albumImage.Height,
-			Width:  albumImage.Width,
-		}
+		wg.Add(1)
+		go func(albumImage spotify.Image) {
+			img := Image{
+				URL:    albumImage.URL,
+				Height: albumImage.Height,
+				Width:  albumImage.Width,
+			}
 
-		resp, err := http.Get(albumImage.URL)
-		if err != nil {
-			img.Error = "could not retrieve album image"
-			images = append(images, img)
-			continue
-		}
-		defer resp.Body.Close()
+			defer func() {
+				images = append(images, img)
+				wg.Done()
+			}()
 
-		processedImg, _, err := image.Decode(resp.Body)
-		if err != nil {
-			img.Error = "could not process album image"
-			images = append(images, img)
-			continue
-		}
+			resp, err := httpClient.Get(albumImage.URL)
+			if err != nil {
+				img.Error = "could not retrieve album image"
+				return
+			}
+			defer resp.Body.Close()
 
-		img.RGBA = dominantcolor.Find(processedImg)
-		img.Hex = dominantcolor.Hex(img.RGBA)
-		images = append(images, img)
+			processedImg, _, err := image.Decode(resp.Body)
+			if err != nil {
+				img.Error = "could not process album image"
+				return
+			}
+
+			img.RGBA = dominantcolor.Find(processedImg)
+			img.Hex = dominantcolor.Hex(img.RGBA)
+		}(albumImage)
 	}
+
+	wg.Wait()
 
 	s.cache.SetWithTTL(cacheTrackImagesKey, images, 0, 5*time.Second)
 
