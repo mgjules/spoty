@@ -65,6 +65,10 @@ func New(clientID, clientSecret, host string, port int, cache *cache.Cache) (*Sp
 	}, nil
 }
 
+func (s *Spoty) IsAuth() bool {
+	return s.Client != nil
+}
+
 func (s *Spoty) IsPlaying() bool {
 	state, err := s.Client.PlayerState()
 	if err != nil {
