@@ -28,10 +28,10 @@ type Image struct {
 }
 
 type Spoty struct {
-	Client *spotify.Client
+	client *spotify.Client
 
-	Auth  spotify.Authenticator
-	State string
+	auth  spotify.Authenticator
+	state string
 
 	cache *cache.Cache
 }
@@ -59,23 +59,40 @@ func New(clientID, clientSecret, host string, port int, cache *cache.Cache) (*Sp
 	}
 
 	return &Spoty{
-		Auth:  auth,
-		State: state.String(),
+		auth:  auth,
+		state: state.String(),
 		cache: cache,
 	}, nil
 }
 
 func (s *Spoty) IsAuth() bool {
-	return s.Client != nil
+	return s.client != nil
 }
 
 func (s *Spoty) IsPlaying() bool {
-	state, err := s.Client.PlayerState()
+	state, err := s.client.PlayerState()
 	if err != nil {
 		return false
 	}
 
 	return state.Playing
+}
+
+func (s *Spoty) AuthURL() string {
+	return s.auth.AuthURL(s.state)
+}
+
+func (s *Spoty) SetupNewClient(r *http.Request) error {
+	tok, err := s.auth.Token(s.state, r)
+	if err != nil {
+		return err
+	}
+
+	client := s.auth.NewClient(tok)
+	client.AutoRetry = true
+	s.client = &client
+
+	return nil
 }
 
 func (s *Spoty) TrackCurrentlyPlaying() (*spotify.FullTrack, error) {
@@ -90,7 +107,7 @@ func (s *Spoty) TrackCurrentlyPlaying() (*spotify.FullTrack, error) {
 		return nil, errors.New("no track currently playing")
 	}
 
-	playing, err := s.Client.PlayerCurrentlyPlaying()
+	playing, err := s.client.PlayerCurrentlyPlaying()
 	if err != nil {
 		return nil, err
 	}
