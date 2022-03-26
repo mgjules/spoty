@@ -12,10 +12,16 @@ import (
 	"time"
 
 	"github.com/JulesMike/spoty/cache"
+	"github.com/JulesMike/spoty/config"
 	"github.com/cenkalti/dominantcolor"
 	"github.com/google/uuid"
 	"github.com/iancoleman/strcase"
 	"github.com/zmb3/spotify"
+	"go.uber.org/fx"
+)
+
+var Module = fx.Options(
+	fx.Provide(New),
 )
 
 type Image struct {
@@ -36,8 +42,8 @@ type Spoty struct {
 	cache *cache.Cache
 }
 
-func New(clientID, clientSecret, host string, port int, cache *cache.Cache) (*Spoty, error) {
-	if clientID == "" || clientSecret == "" {
+func New(cfg *config.Config, cache *cache.Cache) (*Spoty, error) {
+	if cfg.ClientID == "" || cfg.ClientSecret == "" {
 		return nil, errors.New("missing clientID or clientSecret")
 	}
 
@@ -46,12 +52,12 @@ func New(clientID, clientSecret, host string, port int, cache *cache.Cache) (*Sp
 	}
 
 	auth := spotify.NewAuthenticator(
-		fmt.Sprintf("http://%s:%d/api/callback", host, port),
+		fmt.Sprintf("http://%s:%d/api/callback", cfg.Host, cfg.Port),
 		spotify.ScopeUserReadCurrentlyPlaying,
 		spotify.ScopeUserReadPlaybackState,
 	)
 
-	auth.SetAuthInfo(clientID, clientSecret)
+	auth.SetAuthInfo(cfg.ClientID, cfg.ClientSecret)
 
 	state, err := uuid.NewRandom()
 	if err != nil {
@@ -122,7 +128,7 @@ func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 		return nil, errors.New("invalid track")
 	}
 
-	var cacheTrackImagesKey = "track_" + strcase.ToCamel(string(track.ID)) + "_images"
+	cacheTrackImagesKey := "track_" + strcase.ToCamel(string(track.ID)) + "_images"
 
 	cachedImages, found := s.cache.Get(cacheTrackImagesKey)
 	if found {

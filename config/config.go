@@ -4,6 +4,11 @@ import (
 	"fmt"
 
 	"github.com/kelseyhightower/envconfig"
+	"go.uber.org/fx"
+)
+
+var Module = fx.Options(
+	fx.Provide(New),
 )
 
 type Config struct {
