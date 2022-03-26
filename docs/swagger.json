@@ -282,6 +282,10 @@
                     "description": "The number of the track.  If an album has several\ndiscs, the track number is the number on the specified\nDiscNumber.",
                     "type": "integer"
                 },
+                "type": {
+                    "description": "Type of the track",
+                    "type": "string"
+                },
                 "uri": {
                     "type": "string"
                 }
