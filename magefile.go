@@ -1,4 +1,4 @@
-// +build mage
+//go:build mage
 
 package main
 
@@ -49,6 +49,11 @@ func Tidy() error {
 // Generates docs
 func Docs() error {
 	return sh.Run("swag", "init", "--parseDependency", "--parseInternal")
+}
+
+// Lint
+func Lint() error {
+	return sh.Run("golangci-lint", "run", "./...", "--fast")
 }
 
 type Build mg.Namespace

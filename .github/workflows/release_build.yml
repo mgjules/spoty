@@ -25,6 +25,7 @@ jobs:
         run: |
           go install github.com/swaggo/swag/cmd/swag@latest
           go install github.com/magefile/mage@latest
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2

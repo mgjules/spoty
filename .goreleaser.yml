@@ -6,6 +6,7 @@ before:
   hooks:
     - mage tidy
     - mage vet
+    - mage lint
     - mage test
     - mage docs 
 builds:

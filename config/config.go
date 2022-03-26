@@ -7,10 +7,12 @@ import (
 	"go.uber.org/fx"
 )
 
+// Module exported for returning the application Config.
 var Module = fx.Options(
 	fx.Provide(New),
 )
 
+// Config is the configuration for the application.
 type Config struct {
 	Prod         bool   `envconfig:"PROD" default:"false"`
 	ClientID     string `envconfig:"CLIENT_ID" required:"true"`
@@ -21,6 +23,7 @@ type Config struct {
 	CacheMaxCost int64  `envconfig:"CACHE_MAX_COST" default:"1000000"`
 }
 
+// New processes and returns a new application Config.
 func New() (*Config, error) {
 	var cfg Config
 	if err := envconfig.Process("", &cfg); err != nil {

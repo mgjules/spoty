@@ -20,10 +20,14 @@ import (
 	"go.uber.org/fx"
 )
 
+const _defaultTTL = 5 * time.Second
+
+// Module exported for initialising a new Spoty service.
 var Module = fx.Options(
 	fx.Provide(New),
 )
 
+// Image represents an image with its dominant color.
 type Image struct {
 	URL    string     `json:"url"`
 	Height int        `json:"height"`
@@ -33,6 +37,7 @@ type Image struct {
 	Error  string     `json:"error,omitempty"`
 }
 
+// Spoty represents the spoty service.
 type Spoty struct {
 	client *spotify.Client
 
@@ -42,6 +47,7 @@ type Spoty struct {
 	cache *cache.Cache
 }
 
+// New creates a new spoty service.
 func New(cfg *config.Config, cache *cache.Cache) (*Spoty, error) {
 	if cfg.ClientID == "" || cfg.ClientSecret == "" {
 		return nil, errors.New("missing clientID or clientSecret")
@@ -71,10 +77,12 @@ func New(cfg *config.Config, cache *cache.Cache) (*Spoty, error) {
 	}, nil
 }
 
+// IsAuth returns true if the client was created.
 func (s *Spoty) IsAuth() bool {
 	return s.client != nil
 }
 
+// IsPlaying returns true if the client is currently playing.
 func (s *Spoty) IsPlaying() bool {
 	state, err := s.client.PlayerState()
 	if err != nil {
@@ -84,10 +92,12 @@ func (s *Spoty) IsPlaying() bool {
 	return state.Playing
 }
 
+// AuthURL returns the spotify auth url.
 func (s *Spoty) AuthURL() string {
 	return s.auth.AuthURL(s.state)
 }
 
+// SetupNewClient sets up a new spotify client.
 func (s *Spoty) SetupNewClient(r *http.Request) error {
 	tok, err := s.auth.Token(s.state, r)
 	if err != nil {
@@ -101,12 +111,15 @@ func (s *Spoty) SetupNewClient(r *http.Request) error {
 	return nil
 }
 
+// TrackCurrentlyPlaying returns the currently playing track.
 func (s *Spoty) TrackCurrentlyPlaying() (*spotify.FullTrack, error) {
 	const cacheCurrentTrackKey = "current_track"
 
 	cachedTrack, found := s.cache.Get(cacheCurrentTrackKey)
 	if found {
-		return cachedTrack.(*spotify.FullTrack), nil
+		if cachedTrack, ok := cachedTrack.(*spotify.FullTrack); ok {
+			return cachedTrack, nil
+		}
 	}
 
 	if !s.IsPlaying() {
@@ -118,11 +131,12 @@ func (s *Spoty) TrackCurrentlyPlaying() (*spotify.FullTrack, error) {
 		return nil, err
 	}
 
-	s.cache.SetWithTTL(cacheCurrentTrackKey, playing.Item, 0, 5*time.Second)
+	s.cache.SetWithTTL(cacheCurrentTrackKey, playing.Item, 0, _defaultTTL)
 
 	return playing.Item, nil
 }
 
+// TrackImages returns the track images from a track.
 func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 	if track == nil {
 		return nil, errors.New("invalid track")
@@ -132,19 +146,23 @@ func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 
 	cachedImages, found := s.cache.Get(cacheTrackImagesKey)
 	if found {
-		return cachedImages.([]Image), nil
+		if cachedImages, ok := cachedImages.([]Image); ok {
+			return cachedImages, nil
+		}
 	}
 
 	httpClient := &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: _defaultTTL,
 	}
 
 	var wg sync.WaitGroup
 
 	var images []Image
-	for _, albumImage := range track.Album.Images {
+	for i := range track.Album.Images {
+		albumImage := &track.Album.Images[i]
+
 		wg.Add(1)
-		go func(albumImage spotify.Image) {
+		go func(albumImage *spotify.Image) {
 			img := Image{
 				URL:    albumImage.URL,
 				Height: albumImage.Height,
@@ -159,13 +177,15 @@ func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 			resp, err := httpClient.Get(albumImage.URL)
 			if err != nil {
 				img.Error = "could not retrieve album image"
+
 				return
 			}
-			defer resp.Body.Close()
+			defer resp.Body.Close() //nolint: errcheck
 
 			processedImg, _, err := image.Decode(resp.Body)
 			if err != nil {
 				img.Error = "could not process album image"
+
 				return
 			}
 
@@ -176,7 +196,7 @@ func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 
 	wg.Wait()
 
-	s.cache.SetWithTTL(cacheTrackImagesKey, images, 0, 5*time.Second)
+	s.cache.SetWithTTL(cacheTrackImagesKey, images, 0, _defaultTTL)
 
 	return images, nil
 }
