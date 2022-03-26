@@ -18,7 +18,8 @@ definitions:
     properties:
       album:
         $ref: '#/definitions/spotify.SimpleAlbum'
-        description: The album on which the track appears. The album object includes a link in href to full information about the album.
+        description: The album on which the track appears. The album object includes
+          a link in href to full information about the album.
       artists:
         items:
           $ref: '#/definitions/spotify.SimpleArtist'
@@ -31,7 +32,8 @@ definitions:
           type: string
         type: array
       disc_number:
-        description: The disc number (usually 1 unless the album consists of more than one disc).
+        description: The disc number (usually 1 unless the album consists of more
+          than one disc).
         type: integer
       duration_ms:
         description: The length of the track, in milliseconds.
@@ -52,7 +54,8 @@ definitions:
         description: External URLs for this track.
         type: object
       href:
-        description: A link to the Web API endpoint providing full details for this track.
+        description: A link to the Web API endpoint providing full details for this
+          track.
         type: string
       id:
         type: string
@@ -84,6 +87,9 @@ definitions:
           discs, the track number is the number on the specified
           DiscNumber.
         type: integer
+      type:
+        description: Type of the track
+        type: string
       uri:
         type: string
     type: object
@@ -180,7 +186,8 @@ definitions:
           to a time.Time value.
         type: string
       release_date_precision:
-        description: 'The precision with which ReleaseDate value is known: "year", "month", or "day"'
+        description: 'The precision with which ReleaseDate value is known: "year",
+          "month", or "day"'
         type: string
       uri:
         description: The SpotifyURI for the album.
@@ -221,7 +228,8 @@ definitions:
 info:
   contact:
     name: Jules Michael
-  description: Access information about current playing track on spotify through REST endpoints.
+  description: Access information about current playing track on spotify through REST
+    endpoints.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
