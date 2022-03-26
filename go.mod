@@ -3,7 +3,6 @@ module github.com/JulesMike/spoty
 go 1.18
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/cenkalti/dominantcolor v0.0.0-20171020061837-df772e8dd39e
 	github.com/dgraph-io/ristretto v0.1.0
 	github.com/gin-gonic/gin v1.7.7
@@ -17,7 +16,6 @@ require (
 	github.com/swaggo/swag v1.8.0
 	github.com/zmb3/spotify v1.3.0
 	go.uber.org/fx v1.17.1
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 )
 
 require (
