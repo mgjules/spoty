@@ -1,10 +1,7 @@
 package main
 
 import (
-	"log"
-
-	"github.com/JulesMike/spoty/app"
-	"github.com/JulesMike/spoty/server"
+	"github.com/JulesMike/spoty/bootstrap"
 	"go.uber.org/fx"
 )
 
@@ -18,21 +15,5 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 func main() {
-	if err := run(); err != nil {
-		log.Fatalf("[Spoty] %v", err)
-	}
-}
-
-func run() error {
-	app := fx.New(
-		app.DefaultProviders,
-		fx.Invoke(func(server *server.Server) {}),
-	)
-	if err := app.Err(); err != nil {
-		return err
-	}
-
-	app.Run()
-
-	return nil
+	fx.New(bootstrap.Module).Run()
 }

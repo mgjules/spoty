@@ -7,8 +7,14 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/JulesMike/spoty/config"
 	"github.com/JulesMike/spoty/spoty"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/fx"
+)
+
+var Module = fx.Options(
+	fx.Provide(New),
 )
 
 type Server struct {
@@ -18,14 +24,14 @@ type Server struct {
 	addr   string
 }
 
-func New(prod bool, host string, port int, spoty *spoty.Spoty) *Server {
-	if prod {
+func New(cfg *config.Config, spoty *spoty.Spoty) *Server {
+	if cfg.Prod {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
 	s := Server{
 		router: gin.Default(),
-		addr:   fmt.Sprintf("%s:%d", host, port),
+		addr:   fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		spoty:  spoty,
 	}
 
@@ -38,12 +44,10 @@ func New(prod bool, host string, port int, spoty *spoty.Spoty) *Server {
 		ReadHeaderTimeout: 2 * time.Second,
 	}
 
-	s.registerRoutes()
-
 	return &s
 }
 
-func (s *Server) registerRoutes() {
+func (s *Server) RegisterRoutes() {
 	// Swagger
 	s.router.GET("/swagger/*any", s.handleSwagger())
 
