@@ -24,7 +24,7 @@ func bootstrap(lc fx.Lifecycle, s *server.Server) error {
 
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
-			go s.Start()
+			go s.Start() //nolint: errcheck
 
 			return nil
 		},

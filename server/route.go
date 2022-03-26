@@ -9,10 +9,12 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
+// Success defines the structure for a successful response.
 type Success struct {
 	Success string `json:"success"`
 }
 
+// Error defines the structure for a failed response.
 type Error struct {
 	Error string `json:"error"`
 }
@@ -24,7 +26,7 @@ type Error struct {
 // @Produce json
 // @Success 200 {object} server.Success
 // @Router /api [get]
-func (s *Server) handleHealthCheck() gin.HandlerFunc {
+func (Server) handleHealthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.JSON(http.StatusOK, Success{Success: "i'm alright!"})
 	}
@@ -35,6 +37,7 @@ func (s *Server) handleSwagger() gin.HandlerFunc {
 	docs.SwaggerInfo.BasePath = "/"
 
 	url := ginSwagger.URL("http://" + s.addr + "/swagger/doc.json")
+
 	return ginSwagger.WrapHandler(swaggerFiles.Handler, url)
 }
 
@@ -50,7 +53,8 @@ func (s *Server) handleSwagger() gin.HandlerFunc {
 func (s *Server) handleCurrentTrack(c *gin.Context) {
 	track, err := s.spoty.TrackCurrentlyPlaying()
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "could not retrieve currently playing track"})
+		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: "could not retrieve currently playing track"})
+
 		return
 	}
 
@@ -70,13 +74,18 @@ func (s *Server) handleCurrentTrack(c *gin.Context) {
 func (s *Server) handleCurrentTrackImages(c *gin.Context) {
 	track, err := s.spoty.TrackCurrentlyPlaying()
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "could not retrieve currently playing track"})
+		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: "could not retrieve currently playing track"})
+
 		return
 	}
 
 	images, err := s.spoty.TrackImages(track)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "could not process images for currently playing track"})
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			Error{Error: "could not process images for currently playing track"},
+		)
+
 		return
 	}
 
@@ -109,7 +118,8 @@ func (s *Server) handleAuthenticate(c *gin.Context) {
 // @Router /api/callback [get]
 func (s *Server) handleCallback(c *gin.Context) {
 	if err := s.spoty.SetupNewClient(c.Request); err != nil {
-		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "could not retrieve token"})
+		c.AbortWithStatusJSON(http.StatusForbidden, Error{Error: "could not retrieve token"})
+
 		return
 	}
 
