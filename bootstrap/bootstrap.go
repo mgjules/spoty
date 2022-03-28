@@ -5,7 +5,7 @@ import (
 
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
-	"github.com/JulesMike/spoty/server"
+	"github.com/JulesMike/spoty/http"
 	"github.com/JulesMike/spoty/spoty"
 	"go.uber.org/fx"
 )
@@ -14,12 +14,12 @@ import (
 var Module = fx.Options(
 	config.Module,
 	cache.Module,
-	server.Module,
+	http.Module,
 	spoty.Module,
 	fx.Invoke(bootstrap),
 )
 
-func bootstrap(lc fx.Lifecycle, s *server.Server) error {
+func bootstrap(lc fx.Lifecycle, s *http.Server) error {
 	s.RegisterRoutes()
 
 	lc.Append(fx.Hook{
