@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/JulesMike/spoty/build"
 	"github.com/JulesMike/spoty/config"
 	"github.com/JulesMike/spoty/spoty"
 	"github.com/gin-gonic/gin"
@@ -30,11 +31,12 @@ type Server struct {
 	router *gin.Engine
 	http   *http.Server
 	spoty  *spoty.Spoty
+	build  *build.Info
 	addr   string
 }
 
 // New creates a new Server.
-func New(cfg *config.Config, spoty *spoty.Spoty) *Server {
+func New(cfg *config.Config, spoty *spoty.Spoty, build *build.Info) *Server {
 	if cfg.Prod {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -43,6 +45,7 @@ func New(cfg *config.Config, spoty *spoty.Spoty) *Server {
 		router: gin.Default(),
 		addr:   fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		spoty:  spoty,
+		build:  build,
 	}
 
 	s.http = &http.Server{
@@ -59,13 +62,16 @@ func New(cfg *config.Config, spoty *spoty.Spoty) *Server {
 
 // RegisterRoutes registers the REST HTTP routes.
 func (s *Server) RegisterRoutes() {
+	// Health Check
+	s.router.GET("/", s.handleHealthCheck())
+
 	// Swagger
 	s.router.GET("/swagger/*any", s.handleSwagger())
 
 	api := s.router.Group("/api")
 	{
-		// Health Check
-		api.GET("/", s.handleHealthCheck())
+		// Version
+		api.GET("/version", s.handleVersion())
 
 		// Guest routes
 		guest := api.Group("/")

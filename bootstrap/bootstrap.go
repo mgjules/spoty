@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"context"
 
+	"github.com/JulesMike/spoty/build"
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
 	"github.com/JulesMike/spoty/http"
@@ -12,6 +13,7 @@ import (
 
 // Module exported for initialising application.
 var Module = fx.Options(
+	build.Module,
 	config.Module,
 	cache.Module,
 	http.Module,

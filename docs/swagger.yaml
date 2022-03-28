@@ -1,15 +1,24 @@
 definitions:
+  build.Info:
+    properties:
+      dirty_build:
+        type: boolean
+      last_commit:
+        type: string
+      revision:
+        type: string
+    type: object
   color.RGBA:
     properties:
       r:
         type: integer
     type: object
-  server.Error:
+  http.Error:
     properties:
       error:
         type: string
     type: object
-  server.Success:
+  http.Success:
     properties:
       success:
         type: string
@@ -236,7 +245,7 @@ info:
   title: Spoty API
   version: v0.2.0
 paths:
-  /api:
+  /:
     get:
       description: checks if server is running
       produces:
@@ -245,7 +254,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/server.Success'
+            $ref: '#/definitions/http.Success'
       summary: Health Check
       tags:
       - core
@@ -262,7 +271,7 @@ paths:
         "403":
           description: already authenticated
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
       summary: Authentication
       tags:
       - spoty
@@ -286,15 +295,15 @@ paths:
         "200":
           description: authenticated successfully
           schema:
-            $ref: '#/definitions/server.Success'
+            $ref: '#/definitions/http.Success'
         "403":
           description: could not retrieve token
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
         "404":
           description: could not retrieve current user
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
       summary: Callback
       tags:
       - spoty
@@ -311,11 +320,11 @@ paths:
         "401":
           description: not authenticated
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
         "404":
           description: no current playing track found
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
       summary: Current Playing Track
       tags:
       - spoty
@@ -334,16 +343,29 @@ paths:
         "401":
           description: not authenticated
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
         "404":
           description: no current playing track found
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
         "500":
           description: album images could not be processed
           schema:
-            $ref: '#/definitions/server.Error'
+            $ref: '#/definitions/http.Error'
       summary: Album Images of Current Playing Track
       tags:
       - spoty
+  /api/version:
+    get:
+      description: checks the server's version
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/build.Info'
+      summary: Health Check
+      tags:
+      - core
 swagger: "2.0"

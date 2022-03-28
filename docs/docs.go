@@ -22,7 +22,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api": {
+        "/": {
             "get": {
                 "description": "checks if server is running",
                 "produces": [
@@ -36,7 +36,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/server.Success"
+                            "$ref": "#/definitions/http.Success"
                         }
                     }
                 }
@@ -62,7 +62,7 @@ const docTemplate = `{
                     "403": {
                         "description": "already authenticated",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
                         }
                     }
                 }
@@ -98,19 +98,19 @@ const docTemplate = `{
                     "200": {
                         "description": "authenticated successfully",
                         "schema": {
-                            "$ref": "#/definitions/server.Success"
+                            "$ref": "#/definitions/http.Success"
                         }
                     },
                     "403": {
                         "description": "could not retrieve token",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
                         }
                     },
                     "404": {
                         "description": "could not retrieve current user",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
                         }
                     }
                 }
@@ -136,13 +136,13 @@ const docTemplate = `{
                     "401": {
                         "description": "not authenticated",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
                         }
                     },
                     "404": {
                         "description": "no current playing track found",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
                         }
                     }
                 }
@@ -171,19 +171,39 @@ const docTemplate = `{
                     "401": {
                         "description": "not authenticated",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
                         }
                     },
                     "404": {
                         "description": "no current playing track found",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
                         }
                     },
                     "500": {
                         "description": "album images could not be processed",
                         "schema": {
-                            "$ref": "#/definitions/server.Error"
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/version": {
+            "get": {
+                "description": "checks the server's version",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "core"
+                ],
+                "summary": "Health Check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/build.Info"
                         }
                     }
                 }
@@ -191,6 +211,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "build.Info": {
+            "type": "object",
+            "properties": {
+                "dirty_build": {
+                    "type": "boolean"
+                },
+                "last_commit": {
+                    "type": "string"
+                },
+                "revision": {
+                    "type": "string"
+                }
+            }
+        },
         "color.RGBA": {
             "type": "object",
             "properties": {
@@ -199,7 +233,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server.Error": {
+        "http.Error": {
             "type": "object",
             "properties": {
                 "error": {
@@ -207,7 +241,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server.Success": {
+        "http.Success": {
             "type": "object",
             "properties": {
                 "success": {
