@@ -1,8 +1,10 @@
 package main
 
 import (
-	"github.com/JulesMike/spoty/bootstrap"
-	"go.uber.org/fx"
+	"fmt"
+	"os"
+
+	"github.com/JulesMike/spoty/cmd"
 )
 
 // @title Spoty API
@@ -15,5 +17,8 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 func main() {
-	fx.New(bootstrap.Module).Run()
+	if err := cmd.Execute(); err != nil {
+		fmt.Printf("failed to execute cmd: %v", err)
+		os.Exit(1)
+	}
 }

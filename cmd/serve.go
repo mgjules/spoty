@@ -1,4 +1,4 @@
-package bootstrap
+package cmd
 
 import (
 	"context"
@@ -10,22 +10,29 @@ import (
 	"github.com/JulesMike/spoty/http"
 	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/spoty"
+	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
 
-// Module exported for initialising application.
-var Module = fx.Options(
-	build.Module,
-	config.Module,
-	logger.Module,
-	cache.Module,
-	health.Module,
-	http.Module,
-	spoty.Module,
-	fx.Invoke(bootstrap),
-)
+// serveCmd represents the serve command
+var serveCmd = &cobra.Command{
+	Use:   "serve",
+	Short: "Start the HTTP server",
+	Run: func(cmd *cobra.Command, args []string) {
+		fx.New(
+			build.Module,
+			config.Module,
+			logger.Module,
+			cache.Module,
+			health.Module,
+			http.Module,
+			spoty.Module,
+			fx.Invoke(serve),
+		).Run()
+	},
+}
 
-func bootstrap(lc fx.Lifecycle, s *http.Server) error {
+func serve(lc fx.Lifecycle, s *http.Server) error {
 	s.RegisterRoutes()
 
 	lc.Append(fx.Hook{
@@ -40,4 +47,8 @@ func bootstrap(lc fx.Lifecycle, s *http.Server) error {
 	})
 
 	return nil
+}
+
+func init() {
+	rootCmd.AddCommand(serveCmd)
 }
