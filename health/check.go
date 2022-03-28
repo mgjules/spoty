@@ -2,9 +2,16 @@ package health
 
 import (
 	"context"
+	"sync"
 	"time"
 
 	"github.com/alexliesenfeld/health"
+	"go.uber.org/fx"
+)
+
+// Module exported for intialising the health checker.
+var Module = fx.Options(
+	fx.Provide(New),
 )
 
 // Check represents a single health check.
@@ -37,15 +44,38 @@ type Check struct {
 	InitialDelay  time.Duration
 }
 
-// CompileHealthCheckerOption takes a list of Check and returns health.CheckerOption.
-func CompileHealthCheckerOption(checks ...Check) []health.CheckerOption {
-	var opts []health.CheckerOption
-	for i := range checks {
-		c := &checks[i]
+// Checks holds a list of Check from a list of health.Check.
+type Checks struct {
+	mu    sync.Mutex
+	items map[string]*Check
+}
 
-		if c.Name == "" {
+// New returns a new list of Check.
+func New() *Checks {
+	return &Checks{
+		items: make(map[string]*Check),
+	}
+}
+
+// RegisterChecks registers a list of health.Check.
+func (c *Checks) RegisterChecks(checks ...Check) {
+	for i := range checks {
+		check := &checks[i]
+
+		if check.Name == "" {
 			continue
 		}
+
+		c.mu.Lock()
+		c.items[check.Name] = check
+		c.mu.Unlock()
+	}
+}
+
+// CompileHealthCheckerOption takes a list of Check and returns health.CheckerOption.
+func (c *Checks) CompileHealthCheckerOption() []health.CheckerOption {
+	var opts []health.CheckerOption
+	for _, c := range c.items {
 		opts = append(opts, health.WithPeriodicCheck(c.RefreshPeriod, c.InitialDelay, health.Check{
 			Name:               c.Name,
 			Timeout:            c.Timeout,

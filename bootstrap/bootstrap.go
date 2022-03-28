@@ -6,6 +6,7 @@ import (
 	"github.com/JulesMike/spoty/build"
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
+	"github.com/JulesMike/spoty/health"
 	"github.com/JulesMike/spoty/http"
 	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/spoty"
@@ -18,6 +19,7 @@ var Module = fx.Options(
 	config.Module,
 	logger.Module,
 	cache.Module,
+	health.Module,
 	http.Module,
 	spoty.Module,
 	fx.Invoke(bootstrap),

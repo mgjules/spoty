@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/JulesMike/spoty/docs"
-	"github.com/JulesMike/spoty/health"
 	ahealth "github.com/alexliesenfeld/health"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -30,7 +29,7 @@ type Error struct {
 // @Success 503 {object} ahealth.CheckerResult
 // @Router / [get]
 func (s *Server) handleHealthCheck() gin.HandlerFunc {
-	opts := health.CompileHealthCheckerOption(s.spoty.Check())
+	opts := s.health.CompileHealthCheckerOption()
 	checker := ahealth.NewChecker(opts...)
 
 	return gin.WrapF(

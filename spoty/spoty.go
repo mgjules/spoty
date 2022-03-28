@@ -46,17 +46,14 @@ type Spoty struct {
 	auth  spotify.Authenticator
 	state string
 
-	cache *cache.Cache
+	cache  *cache.Cache
+	health *health.Checks
 }
 
 // New creates a new spoty service.
-func New(cfg *config.Config, cache *cache.Cache) (*Spoty, error) {
+func New(cfg *config.Config, cache *cache.Cache, health *health.Checks) (*Spoty, error) {
 	if cfg.ClientID == "" || cfg.ClientSecret == "" {
 		return nil, errors.New("missing clientID or clientSecret")
-	}
-
-	if cache == nil {
-		return nil, errors.New("invalid cache")
 	}
 
 	auth := spotify.NewAuthenticator(
@@ -72,11 +69,16 @@ func New(cfg *config.Config, cache *cache.Cache) (*Spoty, error) {
 		return nil, fmt.Errorf("new uuid: %w", err)
 	}
 
-	return &Spoty{
-		auth:  auth,
-		state: state.String(),
-		cache: cache,
-	}, nil
+	spoty := Spoty{
+		auth:   auth,
+		state:  state.String(),
+		cache:  cache,
+		health: health,
+	}
+
+	spoty.health.RegisterChecks(spoty.Check())
+
+	return &spoty, nil
 }
 
 // IsAuth returns true if the client was created.

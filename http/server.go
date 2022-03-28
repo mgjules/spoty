@@ -8,6 +8,7 @@ import (
 
 	"github.com/JulesMike/spoty/build"
 	"github.com/JulesMike/spoty/config"
+	"github.com/JulesMike/spoty/health"
 	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/spoty"
 	ginzap "github.com/gin-contrib/zap"
@@ -33,6 +34,7 @@ type Server struct {
 	http   *http.Server
 	logger *logger.Logger
 	spoty  *spoty.Spoty
+	health *health.Checks
 	build  *build.Info
 	addr   string
 }
@@ -42,6 +44,7 @@ func New(
 	cfg *config.Config,
 	logger *logger.Logger,
 	spoty *spoty.Spoty,
+	health *health.Checks,
 	build *build.Info,
 ) *Server {
 	if cfg.Prod {
@@ -53,6 +56,7 @@ func New(
 		addr:   fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		logger: logger,
 		spoty:  spoty,
+		health: health,
 		build:  build,
 	}
 
