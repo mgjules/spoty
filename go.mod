@@ -3,6 +3,7 @@ module github.com/JulesMike/spoty
 go 1.18
 
 require (
+	github.com/alexliesenfeld/health v0.6.0
 	github.com/cenkalti/dominantcolor v0.0.0-20171020061837-df772e8dd39e
 	github.com/dgraph-io/ristretto v0.1.0
 	github.com/gin-contrib/zap v0.0.2

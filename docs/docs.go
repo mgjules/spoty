@@ -36,7 +36,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/http.Success"
+                            "$ref": "#/definitions/health.CheckerResult"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/health.CheckerResult"
                         }
                     }
                 }
@@ -230,6 +236,39 @@ const docTemplate = `{
             "properties": {
                 "r": {
                     "type": "integer"
+                }
+            }
+        },
+        "health.CheckResult": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "description": "Error contains the check error message, if the check failed.",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status is the availability status of a component.",
+                    "type": "string"
+                },
+                "timestamp": {
+                    "description": "Timestamp holds the time when the check was executed.",
+                    "type": "string"
+                }
+            }
+        },
+        "health.CheckerResult": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "description": "Details contains health information for all checked components.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/health.CheckResult"
+                    }
+                },
+                "status": {
+                    "description": "Status is the aggregated system availability status.",
+                    "type": "string"
                 }
             }
         },

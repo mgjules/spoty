@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/JulesMike/spoty/docs"
+	"github.com/JulesMike/spoty/health"
+	ahealth "github.com/alexliesenfeld/health"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -24,12 +26,18 @@ type Error struct {
 // @Description checks if server is running
 // @Tags core
 // @Produce json
-// @Success 200 {object} http.Success
+// @Success 200 {object} ahealth.CheckerResult
+// @Success 503 {object} ahealth.CheckerResult
 // @Router / [get]
-func (Server) handleHealthCheck() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(http.StatusOK, Success{Success: "i'm alright!"})
-	}
+func (s *Server) handleHealthCheck() gin.HandlerFunc {
+	opts := health.CompileHealthCheckerOption(s.spoty.Check())
+	checker := ahealth.NewChecker(opts...)
+
+	return gin.WrapF(
+		ahealth.NewHandler(
+			checker,
+		),
+	)
 }
 
 // handleVersion godoc

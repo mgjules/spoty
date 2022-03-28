@@ -1,6 +1,7 @@
 package spoty
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"image"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
+	"github.com/JulesMike/spoty/health"
 	"github.com/cenkalti/dominantcolor"
 	"github.com/google/uuid"
 	"github.com/iancoleman/strcase"
@@ -199,4 +201,22 @@ func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
 	s.cache.SetWithTTL(cacheTrackImagesKey, images, 0, _defaultTTL)
 
 	return images, nil
+}
+
+// Check checks if the spoty service is authenticated.
+func (s *Spoty) Check() health.Check {
+	//nolint:revive
+	return health.Check{
+		Name:          "spoty",
+		RefreshPeriod: 10 * time.Second,
+		InitialDelay:  10 * time.Second,
+		Timeout:       5 * time.Second,
+		Check: func(ctx context.Context) error {
+			if s.IsAuth() {
+				return nil
+			}
+
+			return errors.New("spoty not authenticated")
+		},
+	}
 }
