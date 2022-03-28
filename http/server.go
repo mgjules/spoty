@@ -3,13 +3,14 @@ package http
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/JulesMike/spoty/build"
 	"github.com/JulesMike/spoty/config"
+	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/spoty"
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
 )
@@ -30,13 +31,19 @@ var Module = fx.Options(
 type Server struct {
 	router *gin.Engine
 	http   *http.Server
+	logger *logger.Logger
 	spoty  *spoty.Spoty
 	build  *build.Info
 	addr   string
 }
 
 // New creates a new Server.
-func New(cfg *config.Config, spoty *spoty.Spoty, build *build.Info) *Server {
+func New(
+	cfg *config.Config,
+	logger *logger.Logger,
+	spoty *spoty.Spoty,
+	build *build.Info,
+) *Server {
 	if cfg.Prod {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -44,9 +51,16 @@ func New(cfg *config.Config, spoty *spoty.Spoty, build *build.Info) *Server {
 	s := Server{
 		router: gin.Default(),
 		addr:   fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		logger: logger,
 		spoty:  spoty,
 		build:  build,
 	}
+
+	desugared := logger.Desugar()
+
+	s.router.Use(ginzap.Ginzap(desugared, time.RFC3339, true))
+
+	s.router.Use(ginzap.RecoveryWithZap(desugared, true))
 
 	s.http = &http.Server{
 		Addr:              s.addr,
@@ -94,7 +108,8 @@ func (s *Server) RegisterRoutes() {
 // Start starts the server.
 // It blocks until the server stops.
 func (s *Server) Start() error {
-	log.Println("Listening on http://" + s.addr + " ...")
+	s.logger.Infof("Listening on http://%s...", s.addr)
+
 	if err := s.http.ListenAndServe(); err != nil {
 		return fmt.Errorf("start: %w", err)
 	}
@@ -104,7 +119,8 @@ func (s *Server) Start() error {
 
 // Stop stops the server.
 func (s *Server) Stop(ctx context.Context) error {
-	log.Println("Stopping server ...")
+	s.logger.Info("Stopping server ...")
+
 	if err := s.http.Shutdown(ctx); err != nil {
 		return fmt.Errorf("stop: %w", err)
 	}

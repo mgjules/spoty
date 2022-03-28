@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/cenkalti/dominantcolor v0.0.0-20171020061837-df772e8dd39e
 	github.com/dgraph-io/ristretto v0.1.0
+	github.com/gin-contrib/zap v0.0.2
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/uuid v1.2.0
 	github.com/iancoleman/strcase v0.2.0
@@ -16,6 +17,7 @@ require (
 	github.com/swaggo/swag v1.8.0
 	github.com/zmb3/spotify v1.3.0
 	go.uber.org/fx v1.17.1
+	go.uber.org/zap v1.19.1
 )
 
 require (
@@ -43,10 +45,9 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/ugorji/go/codec v1.2.4 // indirect
-	go.uber.org/atomic v1.6.0 // indirect
+	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/dig v1.14.0 // indirect
-	go.uber.org/multierr v1.5.0 // indirect
-	go.uber.org/zap v1.16.0 // indirect
+	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/crypto v0.0.0-20210317152858-513c2a44f670 // indirect
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
@@ -56,5 +57,4 @@ require (
 	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

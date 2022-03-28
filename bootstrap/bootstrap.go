@@ -7,6 +7,7 @@ import (
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
 	"github.com/JulesMike/spoty/http"
+	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/spoty"
 	"go.uber.org/fx"
 )
@@ -15,6 +16,7 @@ import (
 var Module = fx.Options(
 	build.Module,
 	config.Module,
+	logger.Module,
 	cache.Module,
 	http.Module,
 	spoty.Module,
