@@ -2,8 +2,8 @@ package cache
 
 import (
 	"github.com/JulesMike/spoty/config"
+	"github.com/JulesMike/spoty/json"
 	"github.com/dgraph-io/ristretto"
-	jsoniter "github.com/json-iterator/go"
 	"go.uber.org/fx"
 )
 
@@ -26,7 +26,7 @@ func New(cfg *config.Config) (*Cache, error) {
 		MaxCost:     cfg.CacheMaxCost,
 		BufferItems: _defaultBufferItems,
 		Cost: func(value interface{}) int64 {
-			test, err := jsoniter.Marshal(value)
+			test, err := json.Marshal(value)
 			if err != nil {
 				return 1
 			}
