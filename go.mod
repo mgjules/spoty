@@ -17,9 +17,15 @@ require (
 	github.com/spf13/cobra v1.4.0
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.8.0
+	github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.11
 	github.com/zmb3/spotify v1.3.0
+	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.31.0
+	go.opentelemetry.io/otel v1.6.1
+	go.opentelemetry.io/otel/exporters/jaeger v1.6.1
+	go.opentelemetry.io/otel/sdk v1.6.1
+	go.opentelemetry.io/otel/trace v1.6.1
 	go.uber.org/fx v1.17.1
-	go.uber.org/zap v1.19.1
+	go.uber.org/zap v1.21.0
 )
 
 require (
@@ -29,6 +35,8 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-logr/logr v1.2.3 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/spec v0.20.4 // indirect
@@ -49,13 +57,14 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ugorji/go/codec v1.2.4 // indirect
-	go.uber.org/atomic v1.7.0 // indirect
+	github.com/uptrace/opentelemetry-go-extra/otelutil v0.1.11 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/dig v1.14.0 // indirect
-	go.uber.org/multierr v1.6.0 // indirect
+	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.0.0-20210317152858-513c2a44f670 // indirect
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.0.0-20210903071746-97244b99971b // indirect
+	golang.org/x/sys v0.0.0-20220329152356-43be30ef3008 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.7 // indirect
 	google.golang.org/appengine v1.4.0 // indirect

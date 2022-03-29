@@ -10,6 +10,7 @@ import (
 	"github.com/JulesMike/spoty/http"
 	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/spoty"
+	"github.com/JulesMike/spoty/tracer"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
@@ -23,6 +24,7 @@ var serveCmd = &cobra.Command{
 			build.Module,
 			config.Module,
 			logger.Module,
+			tracer.Module,
 			cache.Module,
 			health.Module,
 			http.Module,

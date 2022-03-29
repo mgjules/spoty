@@ -15,6 +15,7 @@ import (
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
 	"github.com/JulesMike/spoty/health"
+	"github.com/JulesMike/spoty/tracer"
 	"github.com/cenkalti/dominantcolor"
 	"github.com/google/uuid"
 	"github.com/iancoleman/strcase"
@@ -46,12 +47,18 @@ type Spoty struct {
 	auth  spotify.Authenticator
 	state string
 
+	tracer *tracer.Tracer
 	cache  *cache.Cache
 	health *health.Checks
 }
 
 // New creates a new spoty service.
-func New(cfg *config.Config, cache *cache.Cache, health *health.Checks) (*Spoty, error) {
+func New(
+	cfg *config.Config,
+	tracer *tracer.Tracer,
+	cache *cache.Cache,
+	health *health.Checks,
+) (*Spoty, error) {
 	if cfg.ClientID == "" || cfg.ClientSecret == "" {
 		return nil, errors.New("missing clientID or clientSecret")
 	}
@@ -72,6 +79,7 @@ func New(cfg *config.Config, cache *cache.Cache, health *health.Checks) (*Spoty,
 	spoty := Spoty{
 		auth:   auth,
 		state:  state.String(),
+		tracer: tracer,
 		cache:  cache,
 		health: health,
 	}
@@ -116,7 +124,10 @@ func (s *Spoty) SetupNewClient(r *http.Request) error {
 }
 
 // TrackCurrentlyPlaying returns the currently playing track.
-func (s *Spoty) TrackCurrentlyPlaying() (*spotify.FullTrack, error) {
+func (s *Spoty) TrackCurrentlyPlaying(ctx context.Context) (*spotify.FullTrack, error) {
+	_, span := s.tracer.Start(ctx, "TrackCurrentlyPlaying")
+	defer span.End()
+
 	const cacheCurrentTrackKey = "current_track"
 
 	cachedTrack, found := s.cache.Get(cacheCurrentTrackKey)
@@ -141,7 +152,10 @@ func (s *Spoty) TrackCurrentlyPlaying() (*spotify.FullTrack, error) {
 }
 
 // TrackImages returns the track images from a track.
-func (s *Spoty) TrackImages(track *spotify.FullTrack) ([]Image, error) {
+func (s *Spoty) TrackImages(ctx context.Context, track *spotify.FullTrack) ([]Image, error) {
+	_, span := s.tracer.Start(ctx, "TrackImages")
+	defer span.End()
+
 	if track == nil {
 		return nil, errors.New("invalid track")
 	}

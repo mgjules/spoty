@@ -1,6 +1,7 @@
 package http
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/JulesMike/spoty/docs"
@@ -8,6 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+)
+
+var (
+	errRetrieveCurrentTrack = errors.New("failed to retrieve current playing track")
+	errProcessCurrentTrack  = errors.New("failed to process images for currently playing track")
 )
 
 // Success defines the structure for a successful response.
@@ -71,9 +77,12 @@ func (s *Server) handleSwagger() gin.HandlerFunc {
 // @Failure 404 {object} http.Error "no current playing track found"
 // @Router /api/current [get]
 func (s *Server) handleCurrentTrack(c *gin.Context) {
-	track, err := s.spoty.TrackCurrentlyPlaying()
+	ctx := c.Request.Context()
+
+	track, err := s.spoty.TrackCurrentlyPlaying(ctx)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: "could not retrieve currently playing track"})
+		s.logger.ErrorwContext(ctx, errRetrieveCurrentTrack.Error(), "error", err.Error())
+		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: errRetrieveCurrentTrack.Error()})
 
 		return
 	}
@@ -92,18 +101,22 @@ func (s *Server) handleCurrentTrack(c *gin.Context) {
 // @Failure 500 {object} http.Error "album images could not be processed"
 // @Router /api/current/images [get]
 func (s *Server) handleCurrentTrackImages(c *gin.Context) {
-	track, err := s.spoty.TrackCurrentlyPlaying()
+	ctx := c.Request.Context()
+
+	track, err := s.spoty.TrackCurrentlyPlaying(ctx)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: "could not retrieve currently playing track"})
+		s.logger.ErrorwContext(ctx, errRetrieveCurrentTrack.Error(), "error", err.Error())
+		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: errRetrieveCurrentTrack.Error()})
 
 		return
 	}
 
-	images, err := s.spoty.TrackImages(track)
+	images, err := s.spoty.TrackImages(ctx, track)
 	if err != nil {
+		s.logger.ErrorwContext(ctx, errProcessCurrentTrack.Error(), "error", err.Error())
 		c.AbortWithStatusJSON(
 			http.StatusInternalServerError,
-			Error{Error: "could not process images for currently playing track"},
+			Error{Error: errProcessCurrentTrack.Error()},
 		)
 
 		return

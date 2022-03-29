@@ -11,8 +11,10 @@ import (
 	"github.com/JulesMike/spoty/health"
 	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/spoty"
+	"github.com/JulesMike/spoty/tracer"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.uber.org/fx"
 )
 
@@ -33,6 +35,7 @@ type Server struct {
 	router *gin.Engine
 	http   *http.Server
 	logger *logger.Logger
+	tracer *tracer.Tracer
 	spoty  *spoty.Spoty
 	health *health.Checks
 	build  *build.Info
@@ -43,6 +46,7 @@ type Server struct {
 func New(
 	cfg *config.Config,
 	logger *logger.Logger,
+	tracer *tracer.Tracer,
 	spoty *spoty.Spoty,
 	health *health.Checks,
 	build *build.Info,
@@ -55,6 +59,7 @@ func New(
 		router: gin.Default(),
 		addr:   fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		logger: logger,
+		tracer: tracer,
 		spoty:  spoty,
 		health: health,
 		build:  build,
@@ -62,9 +67,9 @@ func New(
 
 	desugared := logger.Desugar()
 
-	s.router.Use(ginzap.Ginzap(desugared, time.RFC3339, true))
-
-	s.router.Use(ginzap.RecoveryWithZap(desugared, true))
+	s.router.Use(ginzap.Ginzap(desugared.Logger, time.RFC3339, true))
+	s.router.Use(ginzap.RecoveryWithZap(desugared.Logger, true))
+	s.router.Use(otelgin.Middleware("main"))
 
 	s.http = &http.Server{
 		Addr:              s.addr,
