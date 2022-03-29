@@ -43,7 +43,7 @@ type Server struct {
 	addr   string
 }
 
-// New creates a new Server.
+// NewServer creates a new Server.
 func NewServer(
 	cfg *config.Config,
 	logger *logger.Logger,
