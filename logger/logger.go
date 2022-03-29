@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/JulesMike/spoty/config"
@@ -20,7 +21,7 @@ type Logger struct {
 }
 
 // New creates a new Logger.
-func New(cfg *config.Config) (*Logger, error) {
+func New(lc fx.Lifecycle, cfg *config.Config) (*Logger, error) {
 	var (
 		logger *zap.Logger
 		err    error
@@ -34,6 +35,14 @@ func New(cfg *config.Config) (*Logger, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to create logger: %w", err)
 	}
+
+	lc.Append(fx.Hook{
+		OnStop: func(_ context.Context) error {
+			logger.Sync()
+
+			return nil
+		},
+	})
 
 	otellogger := otelzap.New(logger)
 

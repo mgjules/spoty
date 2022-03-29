@@ -5,7 +5,6 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/JulesMike/spoty/logger"
 	"go.uber.org/fx"
 )
 
@@ -22,7 +21,7 @@ type Info struct {
 }
 
 // New returns a new instance of Info.
-func New(logger *logger.Logger) (*Info, error) {
+func New() (*Info, error) {
 	bi, ok := debug.ReadBuildInfo()
 	if !ok {
 		return nil, fmt.Errorf("failed to read build info")
@@ -43,7 +42,7 @@ func New(logger *logger.Logger) (*Info, error) {
 		case "vcs.time":
 			hash, err := time.Parse(time.RFC3339, kv.Value)
 			if err != nil {
-				logger.Warnw("failed to parse vcs.time", "error", err, "value", kv.Value)
+				return nil, fmt.Errorf("failed to parse vcs.time: %w", err)
 			}
 
 			info.LastCommit = hash

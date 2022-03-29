@@ -5,8 +5,6 @@ import (
 	"os"
 
 	"github.com/JulesMike/spoty/build"
-	"github.com/JulesMike/spoty/config"
-	"github.com/JulesMike/spoty/logger"
 	"github.com/spf13/cobra"
 )
 
@@ -15,15 +13,10 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Return the build information",
 	Run: func(cmd *cobra.Command, args []string) {
-		logger, err := logger.New(&config.Config{})
+		info, err := build.New()
 		if err != nil {
-			fmt.Printf("failed to start logger: %v", err)
+			fmt.Print(err)
 			os.Exit(1) //nolint:revive
-		}
-
-		info, err := build.New(logger)
-		if err != nil {
-			logger.Fatal(err)
 		}
 
 		fmt.Printf("Revision: %v\n", info.Revision)
