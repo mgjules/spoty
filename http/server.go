@@ -25,9 +25,10 @@ const (
 	_readHeaderTimeout = 2 * time.Second
 )
 
-// Module exported for initialising a new Server.
+// Module exported for initialising a new Server and Client.
 var Module = fx.Options(
-	fx.Provide(New),
+	fx.Provide(NewServer),
+	fx.Provide(NewClient),
 )
 
 // Server is the main HTTP server.
@@ -43,7 +44,7 @@ type Server struct {
 }
 
 // New creates a new Server.
-func New(
+func NewServer(
 	cfg *config.Config,
 	logger *logger.Logger,
 	tracer *tracer.Tracer,
