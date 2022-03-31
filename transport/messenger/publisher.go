@@ -63,8 +63,12 @@ func NewTestPublisher(logger *logger.Logger) *Publisher {
 }
 
 // Publish is a wrapper for the MessagePublishr.Publish.
-func (p *Publisher) Publish(topic string, message ...*message.Message) error {
-	return p.MessagePublisher().Publish(topic, message...)
+func (p *Publisher) Publish(ctx context.Context, topic string, messages ...*message.Message) error {
+	for _, m := range messages {
+		m.SetContext(ctx)
+	}
+
+	return p.MessagePublisher().Publish(topic, messages...)
 }
 
 // MessagePublisher returns the message publisher.
