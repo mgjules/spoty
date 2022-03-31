@@ -46,3 +46,9 @@ func New(lc fx.Lifecycle, cfg *config.Config) (*Logger, error) {
 
 	return &Logger{otellogger.Sugar()}, nil
 }
+
+func (l *Logger) Write(p []byte) (n int, err error) {
+	l.Debug(string(p))
+
+	return len(p), nil
+}

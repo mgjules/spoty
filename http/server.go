@@ -56,6 +56,8 @@ func NewServer(
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	gin.DefaultWriter = logger
+
 	s := Server{
 		router: gin.Default(),
 		addr:   fmt.Sprintf("%s:%d", cfg.HttpServerHost, cfg.HttpServerPort),
