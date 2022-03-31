@@ -7,11 +7,11 @@ import (
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
 	"github.com/JulesMike/spoty/health"
-	"github.com/JulesMike/spoty/http"
 	"github.com/JulesMike/spoty/logger"
-	"github.com/JulesMike/spoty/messenger"
 	"github.com/JulesMike/spoty/spoty"
 	"github.com/JulesMike/spoty/tracer"
+	"github.com/JulesMike/spoty/transport/http"
+	"github.com/JulesMike/spoty/transport/messenger"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
