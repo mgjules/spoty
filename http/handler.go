@@ -12,7 +12,7 @@ import (
 
 // Success defines the structure for a successful response.
 type Success struct {
-	Success string `json:"success"`
+	Message string `json:"message"`
 }
 
 // handleHealthCheck godoc
@@ -182,5 +182,5 @@ func (s *Server) handleCallback(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"success": "welcome, you are now authenticated!"})
+	c.JSON(http.StatusOK, Success{Message: "welcome, you are now authenticated!"})
 }
