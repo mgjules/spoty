@@ -57,6 +57,7 @@ func NewServer(
 	}
 
 	gin.DefaultWriter = logger
+	gin.DefaultErrorWriter = logger
 
 	s := Server{
 		router: gin.Default(),
