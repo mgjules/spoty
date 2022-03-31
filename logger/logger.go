@@ -38,9 +38,7 @@ func New(lc fx.Lifecycle, cfg *config.Config) (*Logger, error) {
 
 	lc.Append(fx.Hook{
 		OnStop: func(_ context.Context) error {
-			logger.Sync()
-
-			return nil
+			return logger.Sync()
 		},
 	})
 
