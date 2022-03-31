@@ -16,6 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 const (
@@ -56,8 +57,10 @@ func NewServer(
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	gin.DefaultWriter = logger
-	gin.DefaultErrorWriter = logger
+	writer := zap.NewStdLog(logger.Desugar().Logger).Writer()
+
+	gin.DefaultWriter = writer
+	gin.DefaultErrorWriter = writer
 
 	s := Server{
 		router: gin.Default(),
