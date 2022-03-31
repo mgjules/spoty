@@ -35,6 +35,7 @@ Spoty provides simple REST API endpoints to query the current playing track on [
     CACHE_MAX_KEYS=64
     CACHE_MAX_COST=1000000
     JAEGER_ENDPOINT=http://localhost:14268/api/traces
+    AMQP_URI=amqp://guest:guest@localhost:5672
     ```
 
 4. Edit the `Redirect URIs` setting of your Spotify application to match the environment variables:
@@ -100,6 +101,7 @@ http://<HOST>:<PORT>/swagger/index.html
 | CACHE_MAX_KEYS        | Maximum number of keys for cache          | No       | 64                                |
 | CACHE_MAX_COST        | Maximum size of cache (in bytes)          | No       | 1000000                           |
 | JAEGER_ENDPOINT       | Jaeger collector endpoint                 | No       | http://localhost:14268/api/traces |
+| AMQP_URI              | AMQP 0-9-1 Uniform Resource Identifier    | No       | amqp://guest:guest@localhost:5672 |
 
 ## About the project
 
