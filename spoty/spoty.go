@@ -15,6 +15,7 @@ import (
 	"github.com/JulesMike/spoty/cache"
 	"github.com/JulesMike/spoty/config"
 	"github.com/JulesMike/spoty/health"
+	"github.com/JulesMike/spoty/logger"
 	"github.com/JulesMike/spoty/tracer"
 	"github.com/cenkalti/dominantcolor"
 	"github.com/google/uuid"
@@ -32,12 +33,13 @@ var Module = fx.Options(
 
 // Image represents an image with its dominant color.
 type Image struct {
-	URL    string     `json:"url"`
-	Height int        `json:"height"`
-	Width  int        `json:"width"`
-	RGBA   color.RGBA `json:"rgba,omitempty"`
-	Hex    string     `json:"hex,omitempty"`
-	Error  string     `json:"error,omitempty"`
+	URL      string     `json:"url"`
+	Height   int        `json:"height"`
+	Width    int        `json:"width"`
+	RGBA     color.RGBA `json:"rgba,omitempty"`
+	Hex      string     `json:"hex,omitempty"`
+	Error    string     `json:"error,omitempty"`
+	RawError error      `json:"-"`
 }
 
 // Spoty represents the spoty service.
@@ -47,6 +49,7 @@ type Spoty struct {
 	auth  spotify.Authenticator
 	state string
 
+	logger *logger.Logger
 	tracer *tracer.Tracer
 	cache  *cache.Cache
 	health *health.Checks
@@ -55,6 +58,7 @@ type Spoty struct {
 // New creates a new spoty service.
 func New(
 	cfg *config.Config,
+	logger *logger.Logger,
 	tracer *tracer.Tracer,
 	cache *cache.Cache,
 	health *health.Checks,
@@ -79,6 +83,7 @@ func New(
 	spoty := Spoty{
 		auth:   auth,
 		state:  state.String(),
+		logger: logger,
 		tracer: tracer,
 		cache:  cache,
 		health: health,
@@ -125,7 +130,7 @@ func (s *Spoty) SetupNewClient(r *http.Request) error {
 
 // TrackCurrentlyPlaying returns the currently playing track.
 func (s *Spoty) TrackCurrentlyPlaying(ctx context.Context) (*spotify.FullTrack, error) {
-	_, span := s.tracer.Start(ctx, "TrackCurrentlyPlaying")
+	ctx, span := s.tracer.Start(ctx, "TrackCurrentlyPlaying")
 	defer span.End()
 
 	const cacheCurrentTrackKey = "current_track"
@@ -133,16 +138,24 @@ func (s *Spoty) TrackCurrentlyPlaying(ctx context.Context) (*spotify.FullTrack, 
 	cachedTrack, found := s.cache.Get(cacheCurrentTrackKey)
 	if found {
 		if cachedTrack, ok := cachedTrack.(*spotify.FullTrack); ok {
+			s.logger.Ctx(ctx).Debugw("found cached track", "track", cachedTrack)
+
 			return cachedTrack, nil
 		}
+
+		s.logger.Ctx(ctx).Debugw("failed to parse cached track. retrieving fresh one...", "track", cachedTrack)
 	}
 
 	if !s.IsPlaying() {
+		s.logger.ErrorwContext(ctx, "no track currently playing")
+
 		return nil, errors.New("no track currently playing")
 	}
 
 	playing, err := s.client.PlayerCurrentlyPlaying()
 	if err != nil {
+		s.logger.ErrorwContext(ctx, "failed to retrieve currently playing track", "error", err.Error())
+
 		return nil, err
 	}
 
@@ -153,7 +166,7 @@ func (s *Spoty) TrackCurrentlyPlaying(ctx context.Context) (*spotify.FullTrack, 
 
 // TrackImages returns the track images from a track.
 func (s *Spoty) TrackImages(ctx context.Context, track *spotify.FullTrack) ([]Image, error) {
-	_, span := s.tracer.Start(ctx, "TrackImages")
+	ctx, span := s.tracer.Start(ctx, "TrackImages")
 	defer span.End()
 
 	if track == nil {
@@ -165,8 +178,12 @@ func (s *Spoty) TrackImages(ctx context.Context, track *spotify.FullTrack) ([]Im
 	cachedImages, found := s.cache.Get(cacheTrackImagesKey)
 	if found {
 		if cachedImages, ok := cachedImages.([]Image); ok {
+			s.logger.Ctx(ctx).Debugw("found cached images", "images", cachedImages)
+
 			return cachedImages, nil
 		}
+
+		s.logger.Ctx(ctx).Debugw("failed to parse cached images. retrieving fresh ones...", "track", cachedImages)
 	}
 
 	httpClient := &http.Client{
@@ -189,12 +206,18 @@ func (s *Spoty) TrackImages(ctx context.Context, track *spotify.FullTrack) ([]Im
 
 			defer func() {
 				images = append(images, img)
+
+				if img.Error != "" {
+					s.logger.WarnwContext(ctx, img.Error, "error", img.RawError.Error(), "image", img)
+				}
+
 				wg.Done()
 			}()
 
-			resp, err := httpClient.Get(albumImage.URL)
+			resp, err := httpClient.Get(img.URL)
 			if err != nil {
 				img.Error = "could not retrieve album image"
+				img.RawError = err
 
 				return
 			}
@@ -203,6 +226,7 @@ func (s *Spoty) TrackImages(ctx context.Context, track *spotify.FullTrack) ([]Im
 			processedImg, _, err := image.Decode(resp.Body)
 			if err != nil {
 				img.Error = "could not process album image"
+				img.RawError = err
 
 				return
 			}
