@@ -3,6 +3,7 @@ package logger
 import (
 	"context"
 	"fmt"
+	"io"
 
 	"github.com/JulesMike/spoty/config"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
@@ -45,4 +46,9 @@ func New(lc fx.Lifecycle, cfg *config.Config) (*Logger, error) {
 	otellogger := otelzap.New(logger)
 
 	return &Logger{otellogger.Sugar()}, nil
+}
+
+// Writer returns the logger's io.Writer.
+func (l *Logger) Writer() io.Writer {
+	return zap.NewStdLog(l.Desugar().Logger).Writer()
 }
