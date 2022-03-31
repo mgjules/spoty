@@ -1,7 +1,6 @@
 package http
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/JulesMike/spoty/docs"
@@ -11,19 +10,9 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-var (
-	errRetrieveCurrentTrack = errors.New("failed to retrieve current playing track")
-	errProcessCurrentTrack  = errors.New("failed to process images for currently playing track")
-)
-
 // Success defines the structure for a successful response.
 type Success struct {
 	Success string `json:"success"`
-}
-
-// Error defines the structure for a failed response.
-type Error struct {
-	Error string `json:"error"`
 }
 
 // handleHealthCheck godoc
@@ -81,8 +70,17 @@ func (s *Server) handleCurrentTrack(c *gin.Context) {
 
 	track, err := s.spoty.TrackCurrentlyPlaying(ctx)
 	if err != nil {
-		s.logger.ErrorwContext(ctx, errRetrieveCurrentTrack.Error(), "error", err.Error())
-		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: errRetrieveCurrentTrack.Error()})
+		rErr := NewError(
+			"no-playing-track",
+			"No track playing currently.",
+			http.StatusNotFound,
+			err.Error(),
+			c.Request.URL.String(),
+			nil,
+		)
+
+		s.logger.ErrorwContext(ctx, "failed to retrieve current playing track", "error", rErr.Error())
+		c.AbortWithStatusJSON(http.StatusNotFound, rErr)
 
 		return
 	}
@@ -105,19 +103,36 @@ func (s *Server) handleCurrentTrackImages(c *gin.Context) {
 
 	track, err := s.spoty.TrackCurrentlyPlaying(ctx)
 	if err != nil {
-		s.logger.ErrorwContext(ctx, errRetrieveCurrentTrack.Error(), "error", err.Error())
-		c.AbortWithStatusJSON(http.StatusNotFound, Error{Error: errRetrieveCurrentTrack.Error()})
+		rErr := NewError(
+			"no-playing-track",
+			"No track playing currently.",
+			http.StatusNotFound,
+			err.Error(),
+			c.Request.URL.String(),
+			nil,
+		)
+
+		s.logger.ErrorwContext(ctx, "failed to retrieve current playing track", "error", rErr.Error())
+		c.AbortWithStatusJSON(http.StatusNotFound, rErr)
 
 		return
 	}
 
 	images, err := s.spoty.TrackImages(ctx, track)
 	if err != nil {
-		s.logger.ErrorwContext(ctx, errProcessCurrentTrack.Error(), "error", err.Error())
-		c.AbortWithStatusJSON(
+		rErr := NewError(
+			"failed-retrieve-track-images",
+			"Could not retrieve track images.",
 			http.StatusInternalServerError,
-			Error{Error: errProcessCurrentTrack.Error()},
+			err.Error(),
+			c.Request.URL.String(),
+			map[string]any{
+				"track": track,
+			},
 		)
+
+		s.logger.ErrorwContext(ctx, "failed to retrieve track images", "error", rErr.Error())
+		c.AbortWithStatusJSON(http.StatusInternalServerError, rErr)
 
 		return
 	}
@@ -151,7 +166,18 @@ func (s *Server) handleAuthenticate(c *gin.Context) {
 // @Router /api/callback [get]
 func (s *Server) handleCallback(c *gin.Context) {
 	if err := s.spoty.SetupNewClient(c.Request); err != nil {
-		c.AbortWithStatusJSON(http.StatusForbidden, Error{Error: "could not retrieve token"})
+		rErr := NewError(
+			"failed-retrieve-token",
+			"Could not retrieve spotify token.",
+			http.StatusForbidden,
+			err.Error(),
+			c.Request.URL.String(),
+			nil,
+		)
+
+		ctx := c.Request.Context()
+		s.logger.ErrorwContext(ctx, "failed to retrieve spotify token", "error", rErr.Error())
+		c.AbortWithStatusJSON(http.StatusForbidden, rErr)
 
 		return
 	}
