@@ -9,7 +9,18 @@ import (
 func (s *Server) unauthenticatedOnly() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if s.spoty.IsAuth() {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "you are already authenticated"})
+			rErr := NewError(
+				"already-authenticated",
+				"You are already authenticated.",
+				http.StatusForbidden,
+				"You cannot authenticate again as you are already authenticated.",
+				c.Request.URL.String(),
+				nil,
+			)
+
+			ctx := c.Request.Context()
+			s.logger.ErrorwContext(ctx, "failed to authenticate", "error", rErr.Error())
+			c.AbortWithStatusJSON(http.StatusForbidden, rErr)
 
 			return
 		}
@@ -21,10 +32,18 @@ func (s *Server) unauthenticatedOnly() gin.HandlerFunc {
 func (s *Server) authenticatedOnly() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if !s.spoty.IsAuth() {
-			c.AbortWithStatusJSON(
+			rErr := NewError(
+				"not-authenticated",
+				"You do not have access.",
 				http.StatusUnauthorized,
-				gin.H{"error": "you must be authenticated to access this endpoint"},
+				"You cannot access this endpoint because you are not authenticated.",
+				c.Request.URL.String(),
+				nil,
 			)
+
+			ctx := c.Request.Context()
+			s.logger.ErrorwContext(ctx, "failed to access endpoint", "error", rErr.Error())
+			c.AbortWithStatusJSON(http.StatusUnauthorized, rErr)
 
 			return
 		}
