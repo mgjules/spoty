@@ -70,7 +70,6 @@ func NewServer(
 
 	s.router.Use(ginzap.Ginzap(desugared.Logger, time.RFC3339, true))
 	s.router.Use(ginzap.RecoveryWithZap(desugared.Logger, true))
-	s.router.Use(otelgin.Middleware("main"))
 
 	s.http = &http.Server{
 		Addr:              s.addr,
@@ -93,6 +92,7 @@ func (s *Server) RegisterRoutes() {
 	s.router.GET("/swagger/*any", s.handleSwagger())
 
 	api := s.router.Group("/api")
+	api.Use(otelgin.Middleware("main"))
 	{
 		// Version
 		api.GET("/version", s.handleVersion())
