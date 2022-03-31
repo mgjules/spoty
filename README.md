@@ -58,7 +58,7 @@ Spoty provides simple REST API endpoints to query the current playing track on [
 
     ```json
     {
-        message: "welcome, you are now authenticated!"
+        "message": "welcome, you are now authenticated!"
     }
     ```
 
