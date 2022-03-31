@@ -74,15 +74,17 @@ http://<HOST>:<PORT>/swagger/index.html
 
 ## Configuration
 
-| ENV               | Description                               | Required  | Default                           |
-| --                | --                                        | --        | --                                |
-| CLIENT_ID         | `Client ID` of app created on Spotify     | **Yes**   | <em>empty</em>                    |
-| CLIENT_SECRET     | `Client Secret` of app created on Spotify | **Yes**   | <em>empty</em>                    |
-| PROD              | Whether running in `PROD` or `DEBUG` mode | No        | false                             |
-| HOST              | Host/IP for HTTP server                   | No        | localhost                         |
-| PORT              | Port for HTTP server                      | No        | 13337                             |
-| CACHE_MAX_KEYS    | Maximum number of keys for cache          | No        | 64                                |
-| CACHE_MAX_COST    | Maximum size of cache (in bytes)          | No        | 1000000                           |
+| ENV                   | Description                               | Required | Default                           |
+| --------------------- | ----------------------------------------- | -------- | --------------------------------- |
+| SERVICE_NAME          | Name of microservice                      | No       | spoty                             |
+| PROD                  | Whether running in `PROD` or `DEBUG` mode | No       | false                             |
+| SPOTIFY_CLIENT_ID     | `Client ID` of app created on Spotify     | **Yes**  | <em>empty</em>                    |
+| SPOTIFY_CLIENT_SECRET | `Client Secret` of app created on Spotify | **Yes**  | <em>empty</em>                    |
+| HTTP_SERVER_HOST      | Host/IP for HTTP server                   | No       | localhost                         |
+| HTTP_SERVER_PORT      | Port for HTTP server                      | No       | 13337                             |
+| CACHE_MAX_KEYS        | Maximum number of keys for cache          | No       | 64                                |
+| CACHE_MAX_COST        | Maximum size of cache (in bytes)          | No       | 1000000                           |
+| JAEGER_ENDPOINT       | Jaeger collector endpoint                 | No       | http://localhost:14268/api/traces |
 
 ## About the project
 
