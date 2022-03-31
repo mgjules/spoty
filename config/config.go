@@ -23,6 +23,7 @@ type Config struct {
 	CacheMaxKeys        int64  `envconfig:"CACHE_MAX_KEYS" default:"64"`
 	CacheMaxCost        int64  `envconfig:"CACHE_MAX_COST" default:"1000000"`
 	JaegerEndpoint      string `envconfig:"JAEGER_ENDPOINT" default:"http://localhost:14268/api/traces"`
+	AMQPURI             string `envconfig:"AMQP_URI" default:"amqp://guest:guest@localhost:5672"`
 }
 
 // New processes and returns a new application Config.

@@ -9,6 +9,7 @@ import (
 	"github.com/JulesMike/spoty/health"
 	"github.com/JulesMike/spoty/http"
 	"github.com/JulesMike/spoty/logger"
+	"github.com/JulesMike/spoty/messenger"
 	"github.com/JulesMike/spoty/spoty"
 	"github.com/JulesMike/spoty/tracer"
 	"github.com/spf13/cobra"
@@ -27,6 +28,7 @@ var serveCmd = &cobra.Command{
 			tracer.Module,
 			cache.Module,
 			health.Module,
+			messenger.Module,
 			http.Module,
 			spoty.Module,
 			fx.Invoke(serve),
