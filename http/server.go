@@ -58,7 +58,7 @@ func NewServer(
 
 	s := Server{
 		router: gin.Default(),
-		addr:   fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		addr:   fmt.Sprintf("%s:%d", cfg.HttpServerHost, cfg.HttpServerPort),
 		logger: logger,
 		tracer: tracer,
 		spoty:  spoty,

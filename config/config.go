@@ -14,15 +14,15 @@ var Module = fx.Options(
 
 // Config is the configuration for the application.
 type Config struct {
-	Prod           bool   `envconfig:"PROD" default:"false"`
-	ClientID       string `envconfig:"CLIENT_ID" required:"true"`
-	ClientSecret   string `envconfig:"CLIENT_SECRET" required:"true"`
-	Host           string `envconfig:"HOST" default:"localhost"`
-	Port           int    `envconfig:"PORT" default:"13337"`
-	CacheMaxKeys   int64  `envconfig:"CACHE_MAX_KEYS" default:"64"`
-	CacheMaxCost   int64  `envconfig:"CACHE_MAX_COST" default:"1000000"`
-	JaegerEndpoint string `envconfig:"JAEGER_ENDPOINT" default:"http://localhost:14268/api/traces"`
-	ServiceName    string `envconfig:"SERVICE_NAME" default:"spoty"`
+	ServiceName         string `envconfig:"SERVICE_NAME" default:"spoty"`
+	Prod                bool   `envconfig:"PROD" default:"false"`
+	SpotifyClientID     string `envconfig:"SPOTIFY_CLIENT_ID" required:"true"`
+	SpotifyClientSecret string `envconfig:"SPOTIFY_CLIENT_SECRET" required:"true"`
+	HttpServerHost      string `envconfig:"HTTP_SERVER_HOST" default:"localhost"`
+	HttpServerPort      int    `envconfig:"HTTP_SERVER_PORT" default:"13337"`
+	CacheMaxKeys        int64  `envconfig:"CACHE_MAX_KEYS" default:"64"`
+	CacheMaxCost        int64  `envconfig:"CACHE_MAX_COST" default:"1000000"`
+	JaegerEndpoint      string `envconfig:"JAEGER_ENDPOINT" default:"http://localhost:14268/api/traces"`
 }
 
 // New processes and returns a new application Config.

@@ -59,17 +59,17 @@ func New(
 	cache *cache.Cache,
 	health *health.Checks,
 ) (*Spoty, error) {
-	if cfg.ClientID == "" || cfg.ClientSecret == "" {
+	if cfg.SpotifyClientID == "" || cfg.SpotifyClientSecret == "" {
 		return nil, errors.New("missing clientID or clientSecret")
 	}
 
 	auth := spotify.NewAuthenticator(
-		fmt.Sprintf("http://%s:%d/api/callback", cfg.Host, cfg.Port),
+		fmt.Sprintf("http://%s:%d/api/callback", cfg.HttpServerHost, cfg.HttpServerPort),
 		spotify.ScopeUserReadCurrentlyPlaying,
 		spotify.ScopeUserReadPlaybackState,
 	)
 
-	auth.SetAuthInfo(cfg.ClientID, cfg.ClientSecret)
+	auth.SetAuthInfo(cfg.SpotifyClientID, cfg.SpotifyClientSecret)
 
 	state, err := uuid.NewRandom()
 	if err != nil {
