@@ -47,7 +47,7 @@ Spoty provides simple REST API endpoints to query the current playing track on [
 5. Run the service:
 
     ```sh
-    $ go run . serve
+    $ ./spoty serve
     ```
 
     > You can also run the service in production mode by setting the `PROD` environment variable to `true`.
