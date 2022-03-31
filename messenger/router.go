@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/JulesMike/spoty/config"
@@ -54,7 +53,7 @@ func NewRouter(
 		health:     health,
 	}
 
-	wlog := watermill.NewStdLoggerWithOut(log.Writer(), !cfg.Prod, false)
+	wlog := watermill.NewStdLoggerWithOut(logger.Writer(), !cfg.Prod, false)
 
 	router, err := message.NewRouter(message.RouterConfig{}, wlog)
 	if err != nil {
