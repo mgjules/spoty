@@ -27,13 +27,15 @@ Spoty provides simple REST API endpoints to query the current playing track on [
     
     Example from [.env.dist](.env.dist):
     ```sh
+    SERVICE_NAME=spoty
     PROD=false
-    CLIENT_ID=111fedce236f4d34a607711a7ac4a606
-    CLIENT_SECRET=fb4d98819b912dfd90d5803bb668ad24
-    HOST=localhost
-    PORT=13337
+    SPOTIFY_CLIENT_ID=111fedce236f4d34a607711a7ac4a606
+    SPOTIFY_CLIENT_SECRET=fb4d98819b912dfd90d5803bb668ad24
+    HTTP_SERVER_HOST=localhost
+    HTTP_SERVER_PORT=13337
     CACHE_MAX_KEYS=64
     CACHE_MAX_COST=1000000
+    JAEGER_ENDPOINT=http://localhost:14268/api/traces
     ```
 
 4. Edit the `Redirect URIs` setting of your Spotify application to match the environment variables:
@@ -43,11 +45,17 @@ Spoty provides simple REST API endpoints to query the current playing track on [
     http://<HOST>:<PORT>/api/callback
     ```
 
-5. Execute the binary and head to the `/api` (health-check) route and expect this json response with a HTTP status code `200`:
+5. Execute the binary and head to the `/api` (health-check) route and expect a similar json response with a HTTP status code `200`:
 
     ```json
     {
-        "success": "i'm alright!"
+        "status": "up",
+        "details": {
+            "spoty": {
+                "status": "up",
+                "timestamp": "2022-03-31T08:10:31.534317878Z"
+            }
+        }
     }
     ```
 
