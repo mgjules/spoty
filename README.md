@@ -9,7 +9,6 @@ Spoty provides simple REST API endpoints to query the current playing track on [
 
 ## Contents
   - [Getting started](#getting-started)
-  - [Usage](#usage)
   - [API Documentation](#api-documentation)
   - [Configuration](#configuration)
   - [About the project](#about-the-project)
@@ -45,8 +44,28 @@ Spoty provides simple REST API endpoints to query the current playing track on [
     http://<HOST>:<PORT>/api/callback
     ```
 
-5. Execute the binary and head to the `/api` (health-check) route and expect a similar json response with a HTTP status code `200`:
+5. Run the service:
 
+    ```sh
+    $ go run . serve
+    ```
+
+    > You can also run the service in production mode by setting the `PROD` environment variable to `true`.
+
+6. Authenticate against Spotify by heading to `/api/authenticate` route. 
+   You should be redirected to the Spotify login page if you not already logged in on Spotify.
+   After logging in, you should be redirected back to the service with the following success message:
+
+    ```json
+    {
+        message: "welcome, you are now authenticated!"
+    }
+    ```
+
+
+7. Head to the `/api` (health-check) route and expect a similar json response with a HTTP status code `200`:
+
+    Example:
     ```json
     {
         "status": "up",
@@ -58,18 +77,6 @@ Spoty provides simple REST API endpoints to query the current playing track on [
         }
     }
     ```
-
-## Usage
-
-To access most of the routes, you'll need to authenticate yourself against Spotify by going to the `/api/authenticate` route:
-
-Example:
-```sh
-http://<HOST>:<PORT>/api/authenticate
-```
-
-1. You should be redirected to Spotify for authentication. 
-2. After which you will be redirected back to the url specified in `REDIRECT_URL`.
 
 ## API Documentation
 
