@@ -37,8 +37,6 @@ var serveCmd = &cobra.Command{
 }
 
 func serve(lc fx.Lifecycle, s *http.Server) error {
-	s.RegisterRoutes()
-
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			go s.Start() //nolint: errcheck

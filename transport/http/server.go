@@ -71,7 +71,6 @@ func NewServer(
 	}
 
 	desugared := logger.Desugar()
-
 	s.router.Use(ginzap.Ginzap(desugared.Logger, time.RFC3339, true))
 	s.router.Use(ginzap.RecoveryWithZap(desugared.Logger, true))
 
@@ -84,11 +83,12 @@ func NewServer(
 		ReadHeaderTimeout: _readHeaderTimeout,
 	}
 
+	s.registerRoutes()
+
 	return &s
 }
 
-// RegisterRoutes registers the REST HTTP routes.
-func (s *Server) RegisterRoutes() {
+func (s *Server) registerRoutes() {
 	// Health Check
 	s.router.GET("/", s.handleHealthCheck())
 
