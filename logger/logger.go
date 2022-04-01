@@ -39,7 +39,9 @@ func New(lc fx.Lifecycle, cfg *config.Config) (*Logger, error) {
 
 	lc.Append(fx.Hook{
 		OnStop: func(_ context.Context) error {
-			return logger.Sync()
+			logger.Sync() //nolint:errcheck,gosec // see:https://github.com/uber-go/zap/issues/328
+
+			return nil
 		},
 	})
 
