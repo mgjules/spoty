@@ -51,7 +51,7 @@ func (s *Server) handleSwagger() gin.HandlerFunc {
 	docs.SwaggerInfo.Host = s.addr
 	docs.SwaggerInfo.BasePath = "/"
 
-	url := ginSwagger.URL("http://" + s.addr + "/swagger/doc.json")
+	url := ginSwagger.URL("/swagger/doc.json")
 
 	return ginSwagger.WrapHandler(swaggerFiles.Handler, url)
 }
