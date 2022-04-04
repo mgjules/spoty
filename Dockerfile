@@ -1,31 +1,25 @@
-FROM golang:1.18-alpine AS build
-
-# Environment Variables
-ENV CGO_ENABLED 0
-ENV GOOS linux
-ENV GOARCH amd64
-
-WORKDIR $HOME/github.com/JulesMike/spoty
+FROM golang:1.18-alpine AS builder
 
 # Add git, curl and upx support
-RUN apk add --update git curl upx
+RUN apk add --no-cache git curl upx
+
+WORKDIR /src
 
 # Pull modules
 COPY go.* ./
 RUN go mod download
 
 # Copy code into image
-COPY . .
+COPY . ./
 
 # Build application for deployment
-RUN go build -tags=jsoniter -trimpath -a -ldflags "-s -w -extldflags '-static'" \
-    -v -o /spoty .
+RUN CGO_ENABLED=0 go build -tags=jsoniter -trimpath -ldflags "-s -w" -o /tmp/spoty .
 
 # Compress binary
-RUN upx --best --lzma /spoty
+RUN upx --best --lzma /tmp/spoty
 
 # Create minimal image with just the application
 # gcr.io/distroless/static is perfect for Go app that do not depend on libc
 FROM gcr.io/distroless/static
-COPY --from=build /spoty /
+COPY --from=builder /tmp/spoty /spoty
 CMD ["/spoty", "serve"]
