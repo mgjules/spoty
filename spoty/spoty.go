@@ -68,7 +68,7 @@ func New(
 	}
 
 	auth := spotify.NewAuthenticator(
-		fmt.Sprintf("http://%s:%d/api/callback", cfg.HttpServerHost, cfg.HttpServerPort),
+		cfg.SpotifyRedirectURI,
 		spotify.ScopeUserReadCurrentlyPlaying,
 		spotify.ScopeUserReadPlaybackState,
 	)

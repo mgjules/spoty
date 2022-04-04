@@ -18,7 +18,8 @@ type Config struct {
 	Prod                bool   `envconfig:"PROD" default:"false"`
 	SpotifyClientID     string `envconfig:"SPOTIFY_CLIENT_ID" required:"true"`
 	SpotifyClientSecret string `envconfig:"SPOTIFY_CLIENT_SECRET" required:"true"`
-	HttpServerHost      string `envconfig:"HTTP_SERVER_HOST" default:"localhost"`
+	SpotifyRedirectURI  string `envconfig:"SPOTIFY_REDIRECT_URI" default:"http://0.0.0.0:13337/api/callback"`
+	HttpServerHost      string `envconfig:"HTTP_SERVER_HOST" default:"0.0.0.0"`
 	HttpServerPort      int    `envconfig:"HTTP_SERVER_PORT" default:"13337"`
 	CacheMaxKeys        int64  `envconfig:"CACHE_MAX_KEYS" default:"64"`
 	CacheMaxCost        int64  `envconfig:"CACHE_MAX_COST" default:"1000000"`
