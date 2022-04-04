@@ -47,8 +47,7 @@ func (s *Server) handleVersion() gin.HandlerFunc {
 	}
 }
 
-func (s *Server) handleSwagger() gin.HandlerFunc {
-	docs.SwaggerInfo.Host = s.addr
+func (Server) handleSwagger() gin.HandlerFunc {
 	docs.SwaggerInfo.BasePath = "/"
 
 	url := ginSwagger.URL("/swagger/doc.json")
