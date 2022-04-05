@@ -19,5 +19,10 @@ bin/*
 # Dependency directories (remove the comment below to include it)
 vendor/
 
+# Waypoint
+.waypoint/
+*.wpvars
+!example.wpvars
+
 # Environment variable
 .env
