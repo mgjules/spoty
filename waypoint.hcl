@@ -28,6 +28,67 @@ app "api" {
     "lang" = "go"
   }
 
+  config {
+    env = {
+      SPOTIFY_CLIENT_ID = dynamic("kubernetes", {
+        name   = "spoty-creds"
+        key    = "spotifyClientID"
+        secret = true
+      })
+
+      SPOTIFY_CLIENT_SECRET = dynamic("kubernetes", {
+        name   = "spoty-creds"
+        key    = "spotifyClientSecret"
+        secret = true
+      })
+
+      SPOTIFY_REDIRECT_URI = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "spotifyRedirectUri"
+      })
+
+      SERVICE_NAME = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "serviceName"
+      })
+
+      PROD = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "prod"
+      })
+
+      HTTP_SERVER_HOST = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "httpServerHost"
+      })
+
+      HTTP_SERVER_PORT = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "httpServerPort"
+      })
+
+      CACHE_MAX_KEYS = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "cacheMaxKeys"
+      })
+
+      CACHE_MAX_COST = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "cacheMaxCost"
+      })
+
+      JAEGER_ENDPOINT = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "jaegerEndpoint"
+      })
+
+      AMQP_URI = dynamic("kubernetes", {
+        name = "spoty-config"
+        key  = "amqpUri"
+      })
+    }
+  }
+
   build {
     use "docker" {
       buildkit = false
