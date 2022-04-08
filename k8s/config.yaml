@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spoty-config
+  namespace: spoty
+data:
+  service-name: spoty
+  prod: "false"
+  spotify-redirect-uri: http://spoty-service.spoty.svc.cluster.local:80
+  http-server-host: 0.0.0.0
+  http-server-port: "9000"
+  cache-max-keys: "64"
+  cache-max-cost: "1000000"
+  jaeger-endpoint: http://localhost:14268/api/traces
+  amqp-uri: amqp://guest:guest@localhost:5672

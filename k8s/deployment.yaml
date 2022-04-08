@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spoty
+  namespace: spoty
+  labels:
+    app: spoty
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spoty
+  template:
+    metadata:
+      labels:
+        app: spoty
+    spec:
+      containers:
+        - name: spoty
+          image: julesmike/spoty:1c20f9f76f4ecd6f45611d4fbbc762d74be008a1
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          ports:
+            - containerPort: 9000
+          env:
+            - name: SPOTIFY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: spoty-secret
+                  key: spotify-client-id
+                  optional: false
+            - name: SPOTIFY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: spoty-secret
+                  key: spotify-client-secret
+                  optional: false
+            - name: SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: service-name
+            - name: PROD
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: prod
+            - name: SPOTIFY_REDIRECT_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: spotify-redirect-uri
+            - name: HTTP_SERVER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: http-server-host
+            - name: HTTP_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: http-server-port
+            - name: CACHE_MAX_KEYS
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: cache-max-keys
+            - name: CACHE_MAX_COST
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: cache-max-cost
+            - name: JAEGER_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: jaeger-endpoint
+            - name: AMQP_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: spoty-config
+                  key: amqp-uri
