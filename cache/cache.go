@@ -1,9 +1,9 @@
 package cache
 
 import (
-	"github.com/JulesMike/spoty/config"
-	"github.com/JulesMike/spoty/json"
 	"github.com/dgraph-io/ristretto"
+	"github.com/mgjules/spoty/config"
+	"github.com/mgjules/spoty/json"
 	"go.uber.org/fx"
 )
 

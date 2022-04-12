@@ -1,4 +1,4 @@
-module github.com/JulesMike/spoty
+module github.com/mgjules/spoty
 
 go 1.18
 

@@ -3,9 +3,9 @@ package http
 import (
 	"net/http"
 
-	"github.com/JulesMike/spoty/docs"
 	ahealth "github.com/alexliesenfeld/health"
 	"github.com/gin-gonic/gin"
+	"github.com/mgjules/spoty/docs"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )

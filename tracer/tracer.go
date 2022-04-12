@@ -1,7 +1,7 @@
 package tracer
 
 import (
-	"github.com/JulesMike/spoty/config"
+	"github.com/mgjules/spoty/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"

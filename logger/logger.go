@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/JulesMike/spoty/config"
+	"github.com/mgjules/spoty/config"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/fx"
 	"go.uber.org/zap"

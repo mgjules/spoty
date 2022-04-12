@@ -1,7 +1,7 @@
 # spoty 🎵
 
-[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](https://godoc.org/github.com/JulesMike/spoty)
-[![Release](https://img.shields.io/github/release/JulesMike/spoty.svg?style=for-the-badge)](https://github.com/JulesMike/spoty/releases/latest)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](https://godoc.org/github.com/mgjules/spoty)
+[![Release](https://img.shields.io/github/release/JulesMike/spoty.svg?style=for-the-badge)](https://github.com/mgjules/spoty/releases/latest)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=for-the-badge)](https://conventionalcommits.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](LICENSE)
 
@@ -16,7 +16,7 @@ Spoty provides simple REST API endpoints to query the current playing track on [
 
 ## Getting started
 
-1. Download the corresponding binary for your operating system and architecture from the [releases](https://github.com/JulesMike/spoty/releases) page.
+1. Download the corresponding binary for your operating system and architecture from the [releases](https://github.com/mgjules/spoty/releases) page.
 
 2. Create a Spotify application [here](https://developer.spotify.com/dashboard/applications).
 

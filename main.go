@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/JulesMike/spoty/cmd"
+	"github.com/mgjules/spoty/cmd"
 )
 
 // @title Spoty API

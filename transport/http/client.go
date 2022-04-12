@@ -1,9 +1,9 @@
 package http
 
 import (
-	"github.com/JulesMike/spoty/config"
-	"github.com/JulesMike/spoty/json"
 	"github.com/go-resty/resty/v2"
+	"github.com/mgjules/spoty/config"
+	"github.com/mgjules/spoty/json"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 )

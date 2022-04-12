@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/JulesMike/spoty/build"
+	"github.com/mgjules/spoty/build"
 	"github.com/spf13/cobra"
 )
 

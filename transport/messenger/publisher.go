@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/JulesMike/spoty/config"
-	"github.com/JulesMike/spoty/health"
-	"github.com/JulesMike/spoty/logger"
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+	"github.com/mgjules/spoty/config"
+	"github.com/mgjules/spoty/health"
+	"github.com/mgjules/spoty/logger"
 )
 
 // Publisher is a wrapper for amqp.Publisher.

@@ -1,6 +1,6 @@
 package http
 
-import "github.com/JulesMike/spoty/json"
+import "github.com/mgjules/spoty/json"
 
 // Error represents a problem details object as described in RFC 7807.
 type Error struct {

@@ -14,7 +14,7 @@ runner {
   profile = "kubernetes"
 
   data_source "git" {
-    url = "https://github.com/JulesMike/spoty.git"
+    url = "https://github.com/mgjules/spoty.git"
     ref = "main"
   }
 
