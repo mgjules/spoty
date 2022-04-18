@@ -8,7 +8,7 @@ import (
 )
 
 // @title Spoty API
-// @version v0.2.1
+// @version v1.0.0
 // @description Access information about current playing track on spotify through REST endpoints.
 
 // @contact.name Jules Michael
