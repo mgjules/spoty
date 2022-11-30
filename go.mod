@@ -19,7 +19,7 @@ require (
 	github.com/magefile/mage v1.13.0
 	github.com/spf13/cobra v1.4.0
 	github.com/swaggo/gin-swagger v1.3.0
-	github.com/swaggo/swag v1.8.0
+	github.com/swaggo/swag v1.8.8
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.11
 	github.com/zmb3/spotify v1.3.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.31.0
@@ -71,11 +71,11 @@ require (
 	go.uber.org/dig v1.14.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.0.0-20210317152858-513c2a44f670 // indirect
-	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.0.0-20220329152356-43be30ef3008 // indirect
+	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/tools v0.1.7 // indirect
+	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
