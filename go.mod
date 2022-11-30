@@ -23,10 +23,10 @@ require (
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.11
 	github.com/zmb3/spotify v1.3.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.31.0
-	go.opentelemetry.io/otel v1.6.1
+	go.opentelemetry.io/otel v1.11.1
 	go.opentelemetry.io/otel/exporters/jaeger v1.6.1
 	go.opentelemetry.io/otel/sdk v1.6.1
-	go.opentelemetry.io/otel/trace v1.6.1
+	go.opentelemetry.io/otel/trace v1.11.1
 	go.uber.org/fx v1.17.1
 	go.uber.org/zap v1.21.0
 )
