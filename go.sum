@@ -209,10 +209,10 @@ github.com/ugorji/go/codec v1.1.7/go.mod h1:Ax+UKWsSmolVDwsd+7N3ZtXu+yMGCf907BLY
 github.com/ugorji/go/codec v1.1.13/go.mod h1:oNVt3Dq+FO91WNQ/9JnHKQP2QJxTzoN7wCBFCq1OeuU=
 github.com/ugorji/go/codec v1.2.7 h1:YPXUKf7fYbp/y8xloBqZOw2qaVggbfwMlI8WM3wZUJ0=
 github.com/ugorji/go/codec v1.2.7/go.mod h1:WGN1fab3R1fzQlVQTkfxVtIBhWDRqOviHU95kRgeqEY=
-github.com/uptrace/opentelemetry-go-extra/otelutil v0.1.11 h1:nJ6pEP6Hix1pWDM2M80qlen8AqObRLRc2EZeX2UZpr8=
-github.com/uptrace/opentelemetry-go-extra/otelutil v0.1.11/go.mod h1:Lswo8SBQprI1DbbHKOblmZ8mgczVSkLRbPZ29gec9OU=
-github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.11 h1:iqBlTM5Jmg9e6JWYfVrpf92UGrBcuPsAnQXQSdp6PbE=
-github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.11/go.mod h1:ur5iayoHo5/C2eVbwdBzMS6Di+0qCRP9tziT4uW/5Yc=
+github.com/uptrace/opentelemetry-go-extra/otelutil v0.1.17 h1:fcKgoKi1dGCFr1zTP0mKzZDGcMliY2hBmBjpGVf/ee4=
+github.com/uptrace/opentelemetry-go-extra/otelutil v0.1.17/go.mod h1:wl/W+O/95rYcMa67D9qQ+8/IJEztbyYSUkdT7L6t+p4=
+github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.17 h1:ZFDhJIm6I2wKBOenKw7ibzgMiKsKBvOA5T6ZbYMIfpM=
+github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.17/go.mod h1:0R+OHAw0HBsvknJeVvRSI64BFi+UZAH/255Tl7wfEnw=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/zmb3/spotify v1.3.0 h1:6Z2F1IMx0Hviq/dpf8nFwvKPppFEMXn8yfReSBVi16k=
@@ -232,8 +232,8 @@ go.opentelemetry.io/otel/trace v1.6.1/go.mod h1:RkFRM1m0puWIq10oxImnGEduNBzxiN7T
 go.opentelemetry.io/otel/trace v1.10.0 h1:npQMbR8o7mum8uF95yFbOEJffhs1sbCOfDh8zAJiH5E=
 go.opentelemetry.io/otel/trace v1.10.0/go.mod h1:Sij3YYczqAdz+EhmGhE6TpTxUO5/F/AzrK+kxfGqySM=
 go.uber.org/atomic v1.7.0/go.mod h1:fEN4uk6kAWBTFdckzkM89CLk9XfWZrxpCo0nPH17wJc=
-go.uber.org/atomic v1.9.0 h1:ECmE8Bn/WFTYwEW/bpKD3M8VtR/zQVbavAoalC1PYyE=
-go.uber.org/atomic v1.9.0/go.mod h1:fEN4uk6kAWBTFdckzkM89CLk9XfWZrxpCo0nPH17wJc=
+go.uber.org/atomic v1.10.0 h1:9qC72Qh0+3MqyJbAn8YU5xVq1frD8bn3JtD2oXtafVQ=
+go.uber.org/atomic v1.10.0/go.mod h1:LUxbIzbOniOlMKjJjyPfpl4v+PKK2cNJn91OQbhoJI0=
 go.uber.org/dig v1.14.0 h1:VmGvIH45/aapXPQkaOrK5u4B5B7jxZB98HM/utx0eME=
 go.uber.org/dig v1.14.0/go.mod h1:jHAn/z1Ld1luVVyGKOAIFYz/uBFqKjjEEdIqVAqfQ2o=
 go.uber.org/fx v1.17.1 h1:S42dZ6Pok8hQ3jxKwo6ZMYcCgHQA/wAS/gnpRa1Pksg=
