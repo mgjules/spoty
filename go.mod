@@ -7,7 +7,7 @@ require (
 	github.com/ThreeDotsLabs/watermill-amqp/v2 v2.0.4
 	github.com/alexliesenfeld/health v0.6.0
 	github.com/cenkalti/dominantcolor v0.0.0-20171020061837-df772e8dd39e
-	github.com/dgraph-io/ristretto v0.1.0
+	github.com/dgraph-io/ristretto v0.1.1
 	github.com/gin-contrib/zap v0.1.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-resty/resty/v2 v2.7.0
