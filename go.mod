@@ -22,7 +22,7 @@ require (
 	github.com/swaggo/swag v1.8.10
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.18
 	github.com/zmb3/spotify v1.3.0
-	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.31.0
+	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.38.0
 	go.opentelemetry.io/otel v1.12.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.6.1
 	go.opentelemetry.io/otel/sdk v1.12.0
@@ -73,10 +73,10 @@ require (
 	go.uber.org/dig v1.16.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
-	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/text v0.6.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
