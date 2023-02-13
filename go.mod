@@ -20,12 +20,12 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.8.10
-	github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.20
+	github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.21
 	github.com/zmb3/spotify v1.3.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.31.0
 	go.opentelemetry.io/otel v1.13.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.6.1
-	go.opentelemetry.io/otel/sdk v1.12.0
+	go.opentelemetry.io/otel/sdk v1.13.0
 	go.opentelemetry.io/otel/trace v1.13.0
 	go.uber.org/fx v1.19.1
 	go.uber.org/zap v1.24.0
@@ -68,7 +68,7 @@ require (
 	github.com/rabbitmq/amqp091-go v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/uptrace/opentelemetry-go-extra/otelutil v0.1.20 // indirect
+	github.com/uptrace/opentelemetry-go-extra/otelutil v0.1.21 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/dig v1.16.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
