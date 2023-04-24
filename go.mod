@@ -19,7 +19,7 @@ require (
 	github.com/magefile/mage v1.14.0
 	github.com/spf13/cobra v1.7.0
 	github.com/swaggo/gin-swagger v1.3.0
-	github.com/swaggo/swag v1.8.12
+	github.com/swaggo/swag v1.16.1
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.1.21
 	github.com/zmb3/spotify v1.3.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.40.0
