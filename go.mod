@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/ThreeDotsLabs/watermill v1.2.0
 	github.com/ThreeDotsLabs/watermill-amqp/v2 v2.0.7
-	github.com/alexliesenfeld/health v0.6.0
+	github.com/alexliesenfeld/health v0.7.0
 	github.com/cenkalti/dominantcolor v1.0.0
 	github.com/dgraph-io/ristretto v0.1.1
 	github.com/gin-contrib/zap v0.1.0
